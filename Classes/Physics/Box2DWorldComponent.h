@@ -33,6 +33,8 @@ public:
 	{
 		return world;
 	}
+
+	virtual void update(float delta);
 };
 
 #endif

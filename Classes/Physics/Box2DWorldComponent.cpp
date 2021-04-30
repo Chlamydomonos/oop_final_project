@@ -14,3 +14,8 @@ Box2DWorldComponent *Box2DWorldComponent::create(b2Vec2 gravity)
 
     return ret;
 }
+
+void Box2DWorldComponent::update(float delta)
+{
+    world->Step(delta, 8, 3);
+}

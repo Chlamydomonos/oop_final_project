@@ -1,5 +1,6 @@
 #include "Box2DBodyComponent.h"
 #include "Box2DWorldComponent.h"
+#include "../utils/VectorConversion.h"
 
 Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef *fixtureDef)
 {
@@ -35,4 +36,5 @@ void Box2DBodyComponent::onAdd()
 
 void Box2DBodyComponent::update(float delta)
 {
+    getOwner()->setPosition(p2r(body->GetPosition()));
 }
