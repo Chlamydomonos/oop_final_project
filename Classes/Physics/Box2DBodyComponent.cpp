@@ -6,8 +6,8 @@ Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef 
 {
     Box2DBodyComponent *ret = new Box2DBodyComponent();
 
-    ret->bodyDef = bodyDef;
-    ret->fixtureDef = fixtureDef;
+    ret->bodyDef = new b2BodyDef(*bodyDef);
+    ret->fixtureDef = new b2FixtureDef(*fixtureDef);
 
     if (ret && ret->init())
         ret->autorelease();
@@ -17,11 +17,19 @@ Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef 
     return ret;
 }
 
-void Box2DBodyComponent::onAdd()
+void Box2DBodyComponent::update(float delta)
+{
+    if (body != nullptr)
+    {
+        getOwner()->setPosition(p2r(body->GetPosition()));
+        getOwner()->setRotation(body->GetAngle() / 3.1415926 * 180);
+    }
+}
+
+void Box2DBodyComponent::addToWorld()
 {
     try
     {
-        cocos2d::Component::onAdd();
         auto node = getOwner();
         auto p = node->getComponent("b2World");
 
@@ -38,15 +46,12 @@ void Box2DBodyComponent::onAdd()
         auto w = wp->getWorld();
         body = w->CreateBody(bodyDef);
         body->CreateFixture(fixtureDef);
+
+        CC_SAFE_DELETE(bodyDef);
+        CC_SAFE_DELETE(fixtureDef);
     }
     catch (...)
     {
         throw Exception("Error adding physics body to sprite");
     }
-}
-
-void Box2DBodyComponent::update(float delta)
-{
-    getOwner()->setPosition(p2r(body->GetPosition()));
-    getOwner()->setRotation(body->GetAngle() / 3.1415926 * 180);
 }

@@ -7,9 +7,13 @@
 /**
 * @brief 用于Sprite的物理刚体组件。
 * 
-* 基于Box2D中的刚体。为Sprite添加该组件时Sprite
-* 应该至少有一个上级对象拥有Box2DWorldComponent，
-* 否则会抛出异常。该组件的内存会自动释放。
+* 基于Box2D中的刚体。当拥有该组件的
+* Sprite进入拥有Box2DWorldComponent
+* 的场景时，需要手动调用addToWorld
+* 函数来开启物理模拟。
+* 
+* 该组件的名称为b2Body，可直接用
+* getComponent("b2Body")获取。
 */
 class Box2DBodyComponent : public cocos2d::Component
 {
@@ -34,15 +38,36 @@ public:
 	/**
 	* @brief 以Box2D的标准方式创建一个物理刚体组件。
 	* 
-	* 需要手动删除bodyDef和fixtureDef两个变量，并
-	* 确保它们存活到该组件被添加到Sprite。
+	* 组件创建后，bodyDef与fixtureDef不会被释放。
 	*/
 	static Box2DBodyComponent *create(b2BodyDef *bodyDef, b2FixtureDef *fixtureDef);
 
-	virtual ~Box2DBodyComponent(){}
+	virtual ~Box2DBodyComponent()
+	{
+		CC_SAFE_DELETE(bodyDef);
+		CC_SAFE_DELETE(fixtureDef);
+	}
 
-	virtual void onAdd();
 	virtual void update(float delta);
+
+	/**
+	* @brief 把组件添加进物理空间。
+	* 
+	* @attention 调用该函数时，必须保证组件拥有者
+	* 已经位于具有Box2DWorldComponent的场景中，
+	* 否则会抛出异常。
+	*/
+	void addToWorld();
+
+	/**
+	* @brief 获取实际的b2Body。
+	* 
+	* @attention 不要delete返回的b2Body！
+	*/
+	b2Body *getBody()
+	{
+		return body;
+	}
 };
 
 #endif

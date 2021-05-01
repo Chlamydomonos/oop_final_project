@@ -7,24 +7,25 @@ using namespace cocos2d;
 
 bool TestScene::init()
 {
+    //--向场景添加物理空间组件----------------------
     if(!Scene::init())
         return false;
 
     this->addComponent(Box2DWorldComponent::create(b2Vec2(0.0f, -10.0f)));
 
-    //--------------------------------------------
+    //--建立动态Sprite-----------------------------
     
     dynamicSprite = Sprite::create("pure_red.png");
     dynamicSprite->setScale(4, 4);
-    dynamicSprite->setPosition(p2r(b2Vec2(8.0f, 8.0f)));
     this->addChild(dynamicSprite);
+
+    //--建立静态Sprite-----------------------------
 
     staticSprite = Sprite::create("pure_red.png");
     staticSprite->setScale(64, 4);
-    staticSprite->setPosition(p2r(b2Vec2(8.0f, 0.5f)));
     this->addChild(staticSprite);
 
-    //--------------------------------------------
+    //--建立静态物理组件----------------------------
 
     b2BodyDef staticBodyDef;
     staticBodyDef.position.Set(8.0f, 0.5f);
@@ -35,14 +36,17 @@ bool TestScene::init()
     b2FixtureDef staticFixtureDef;
     staticFixtureDef.shape = &staticBox;
 
-    staticSprite->addComponent(Box2DBodyComponent::create(&staticBodyDef, &staticFixtureDef));
+    auto staticBodyComponent = Box2DBodyComponent::create(&staticBodyDef, &staticFixtureDef);
+    staticSprite->addComponent(staticBodyComponent);
+    staticBodyComponent->addToWorld();
 
-    //--------------------------------------------
+    //--建立动态物理组件----------------------------
 
     b2BodyDef dynamicBodyDef;
     dynamicBodyDef.type = b2_dynamicBody;
-    //dynamicBodyDef.position.Set(32.0f, 15.0f);
     dynamicBodyDef.position.Set(8.0f, 8.0f);
+
+    dynamicBodyDef.angularVelocity = 0.1f;
 
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(0.5f, 0.5f);
@@ -53,13 +57,13 @@ bool TestScene::init()
     dynamicFixtureDef.friction = 0.3f;
     dynamicFixtureDef.restitution = 0.8f;
 
-    dynamicSprite->addComponent(Box2DBodyComponent::create(&dynamicBodyDef, &dynamicFixtureDef));
+    auto dynamicBodyComponent = Box2DBodyComponent::create(&dynamicBodyDef, &dynamicFixtureDef);
+    dynamicSprite->addComponent(dynamicBodyComponent);
+    dynamicBodyComponent->addToWorld();
 
-    //--------------------------------------------
+    //--开启update函数------------------------------
 
     scheduleUpdate();
-    //dynamicSprite->scheduleUpdate();
-    //staticSprite->scheduleUpdate();
 
     return true;
 }
