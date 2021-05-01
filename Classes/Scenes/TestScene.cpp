@@ -28,7 +28,7 @@ bool TestScene::init()
     //--建立静态物理组件----------------------------
 
     b2BodyDef staticBodyDef;
-    staticBodyDef.position.Set(8.0f, 0.5f);
+    staticBodyDef.position.Set(8.0fu, 0.5f);
 
     b2PolygonShape staticBox;
     staticBox.SetAsBox(32.0f, 0.5f);
