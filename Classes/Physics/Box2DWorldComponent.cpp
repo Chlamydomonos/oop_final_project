@@ -1,6 +1,6 @@
 #include "Box2DWorldComponent.h"
 
-Box2DWorldComponent *Box2DWorldComponent::create(b2Vec2 gravity)
+Box2DWorldComponent *Box2DWorldComponent::create(const b2Vec2 &gravity)
 {
     auto ret = new Box2DWorldComponent();
 

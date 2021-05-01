@@ -6,6 +6,12 @@
 
 #include "../Exception/Exception.h"
 
+/**
+* @brief 用于Scene的物理空间组件
+* 
+* 注意，添加该组件的场景必须使用
+* scheduleUpdate()函数开启帧模拟
+*/
 class Box2DWorldComponent : public cocos2d::Component
 {
 private:
@@ -27,7 +33,7 @@ public:
 		delete world;
 	}
 
-	static Box2DWorldComponent *create(b2Vec2 gravity);
+	static Box2DWorldComponent *create(const b2Vec2 &gravity);
 
 	b2World *getWorld()
 	{

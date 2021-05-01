@@ -15,9 +15,8 @@ public:
 
 	virtual ~TestScene();
 private:
-	b2World *world;
 	cocos2d::Sprite *dynamicSprite;
-	b2Body *dynamicBody;
+	cocos2d::Sprite *staticSprite;
 };
 
 #endif

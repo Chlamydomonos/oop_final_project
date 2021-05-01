@@ -1,4 +1,7 @@
 #include "TestScene.h"
+#include "../Physics/Box2DWorldComponent.h"
+#include "../Physics/Box2DBodyComponent.h"
+#include "../utils/VectorConversion.h"
 
 using namespace cocos2d;
 
@@ -7,43 +10,56 @@ bool TestScene::init()
     if(!Scene::init())
         return false;
 
-    world = new b2World(b2Vec2(0.0f, -10.0f));
+    this->addComponent(Box2DWorldComponent::create(b2Vec2(0.0f, -10.0f)));
 
-    auto sprite = Sprite::create("pure_red.png");
-    sprite->setScaleX(64.0f);
-    sprite->setPosition(Vec2(512.0f, 8.0f));
-    this->addChild(sprite);
-
-    b2BodyDef def;
-    def.position.Set(32.0f, 0.5f);
-
-    b2Body* body = world->CreateBody(&def);
-
-    b2PolygonShape shape;
-    shape.SetAsBox(32.0f, 0.5f);
-
-    body->CreateFixture(&shape, 0.0f);
-
+    //--------------------------------------------
+    
     dynamicSprite = Sprite::create("pure_red.png");
-    dynamicSprite->setPosition(Vec2(512.0f, 640.0f));
+    dynamicSprite->setScale(4, 4);
+    dynamicSprite->setPosition(p2r(b2Vec2(8.0f, 8.0f)));
     this->addChild(dynamicSprite);
 
-    b2BodyDef dDef;
-    dDef.type = b2_dynamicBody;
-    dDef.position.Set(32.0f, 40.0f);
+    staticSprite = Sprite::create("pure_red.png");
+    staticSprite->setScale(64, 4);
+    staticSprite->setPosition(p2r(b2Vec2(8.0f, 0.5f)));
+    this->addChild(staticSprite);
 
-    dynamicBody = world->CreateBody(&dDef);
+    //--------------------------------------------
 
-    b2PolygonShape dShape;
-    dShape.SetAsBox(0.5f, 0.5f);
-    b2FixtureDef dFixtureDef;
-    dFixtureDef.shape = &dShape;
-    dFixtureDef.density = 1.0f;
-    dFixtureDef.friction = 0.3f;
-    dFixtureDef.restitution = 0.9f;
-    dynamicBody->CreateFixture(&dFixtureDef);
+    b2BodyDef staticBodyDef;
+    staticBodyDef.position.Set(8.0f, 0.5f);
+
+    b2PolygonShape staticBox;
+    staticBox.SetAsBox(32.0f, 0.5f);
+
+    b2FixtureDef staticFixtureDef;
+    staticFixtureDef.shape = &staticBox;
+
+    staticSprite->addComponent(Box2DBodyComponent::create(&staticBodyDef, &staticFixtureDef));
+
+    //--------------------------------------------
+
+    b2BodyDef dynamicBodyDef;
+    dynamicBodyDef.type = b2_dynamicBody;
+    //dynamicBodyDef.position.Set(32.0f, 15.0f);
+    dynamicBodyDef.position.Set(8.0f, 8.0f);
+
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(0.5f, 0.5f);
+
+    b2FixtureDef dynamicFixtureDef;
+    dynamicFixtureDef.shape = &dynamicBox;
+    dynamicFixtureDef.density = 1.0f;
+    dynamicFixtureDef.friction = 0.3f;
+    dynamicFixtureDef.restitution = 0.8f;
+
+    dynamicSprite->addComponent(Box2DBodyComponent::create(&dynamicBodyDef, &dynamicFixtureDef));
+
+    //--------------------------------------------
 
     scheduleUpdate();
+    //dynamicSprite->scheduleUpdate();
+    //staticSprite->scheduleUpdate();
 
     return true;
 }
@@ -51,17 +67,9 @@ bool TestScene::init()
 void TestScene::update(float delta)
 {
     Scene::update(delta);
-    world->Step(delta, 8, 3);
-
-    auto position = dynamicBody->GetPosition();
-    dynamicSprite->setPosition(Vec2(position.x * 16, position.y * 16));
-
-    auto rotation = dynamicBody->GetAngle();
-
-    dynamicSprite->setRotation(rotation / 3.1415926 * 180);
 }
 
 TestScene::~TestScene()
 {
-    delete world;
+    
 }
