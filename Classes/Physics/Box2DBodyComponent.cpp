@@ -1,6 +1,6 @@
 #include "Box2DBodyComponent.h"
 #include "Box2DWorldComponent.h"
-#include "../utils/VectorConversion.h"
+#include "../Utils/VectorConversion.h"
 
 Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef *fixtureDef)
 {
