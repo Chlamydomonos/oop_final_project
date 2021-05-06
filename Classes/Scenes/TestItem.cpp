@@ -11,7 +11,11 @@ bool TestItem::init() {
 
 	item = ItemStackSprite::create("testsprite");
 
+	this->addChild(item);
+
 	item->GetBodyComponent()->addToWorld();
+
+	item->GetBodyComponent()->getBody()->SetTransform(b2Vec2(5, 5), 0.0f);
 
 	scheduleUpdate();
 

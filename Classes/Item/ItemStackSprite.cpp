@@ -10,19 +10,22 @@ ItemStackSprite* ItemStackSprite::create(string Name) {
         b2BodyDef BodyDef;
         BodyDef.type = b2_dynamicBody;
         BodyDef.position.Set(8.0f, 8.0f);
-        BodyDef.angularVelocity = 0.1f;
 
         b2PolygonShape Box;
-        Box.SetAsBox(0.5f, 0.5f);
+        Box.SetAsBox(0.25f, 0.25f);
 
         b2FixtureDef FixtureDef;
         FixtureDef.shape = &Box;
         FixtureDef.density = 1.0f;
         FixtureDef.friction = 0.3f;
-        FixtureDef.restitution = 0.8f;
 
         spr->BodyComponent = Box2DBodyComponent::create(&BodyDef, &FixtureDef);
         spr->addComponent(spr->BodyComponent);
+
+        auto w = spr->getContentSize().width;
+        auto h = spr->getContentSize().height;
+        spr->setScaleX(32 / w);
+        spr->setScaleY(32 / h);
 
         return spr;
     }

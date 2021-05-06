@@ -8,6 +8,27 @@ Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef 
 
     ret->bodyDef = new b2BodyDef(*bodyDef);
     ret->fixtureDef = new b2FixtureDef(*fixtureDef);
+    auto shapeType = fixtureDef->shape->GetType();
+
+    switch (shapeType)
+    {
+    case b2Shape::e_circle:
+        ret->fixtureDef->shape = new b2CircleShape(*dynamic_cast<const b2CircleShape*>(fixtureDef->shape));
+        break;
+    case b2Shape::e_edge:
+        ret->fixtureDef->shape = new b2EdgeShape(*dynamic_cast<const b2EdgeShape *>(fixtureDef->shape));
+        break;
+    case b2Shape::e_polygon:
+        ret->fixtureDef->shape = new b2PolygonShape(*dynamic_cast<const b2PolygonShape *>(fixtureDef->shape));
+        break;
+    case b2Shape::e_chain:
+        ret->fixtureDef->shape = new b2ChainShape(*dynamic_cast<const b2ChainShape *>(fixtureDef->shape));
+        break;
+    case b2Shape::e_typeCount:
+        break;
+    default:
+        break;
+    }
 
     if (ret && ret->init())
         ret->autorelease();
@@ -47,6 +68,7 @@ void Box2DBodyComponent::addToWorld()
         body = w->CreateBody(bodyDef);
         body->CreateFixture(fixtureDef);
 
+        CC_SAFE_DELETE(fixtureDef->shape);
         CC_SAFE_DELETE(bodyDef);
         CC_SAFE_DELETE(fixtureDef);
     }
