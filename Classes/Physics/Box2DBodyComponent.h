@@ -46,6 +46,7 @@ public:
 	{
 		CC_SAFE_DELETE(bodyDef);
 		CC_SAFE_DELETE(fixtureDef);
+		body->GetWorld()->DestroyBody(body);
 	}
 
 	virtual void update(float delta);
