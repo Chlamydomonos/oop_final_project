@@ -2,18 +2,25 @@
 #define MAP_TILETYPE_H
 
 #include <string>
+#include <cocos2d.h>
+#include <map>
+
+class Tile;
 
 class TileType
 {
 private:
-	std::string imageName;
-	std::string tileName;
+	std::string _name;
+	int _hardness;
+
 public:
-	TileType(std::string image_name, std::string tile_name) : imageName{ image_name }, tileName{ tile_name }
-	{}
-	~TileType(){}
-	std::string getImageName() const{ return imageName; }
-	std::string getTileName() const { return tileName; }
+	TileType(const std::string &name, int hardness);
+	static std::map<std::string, TileType *> ALL_TILES;
+
+	std::string getName() const { return _name; }
+	int getHardness() { return _hardness; }
+
+	virtual void onBroken(Tile *tile);
 };
 
 #endif

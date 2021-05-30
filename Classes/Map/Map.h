@@ -2,35 +2,25 @@
 #ifndef MAP_MAP_H
 #define MAP_MAP_H
 
-#include "Tile.h"
 #include "TileType.h"
+#include <cocos2d.h>
 
-class Map
+class Tile;
+
+class Map : public cocos2d::Node
 {
 private:
 	int width; // 共width列
 	int height; // 共height行
 	Tile*** tiles;
 public:
-	Map(int w, int h, TileType** tiletype, float x_start, float y_start) :width{ w }, height{ h }
-	{
-		Tile*** tiles = new Tile * *[h];
-		for (int i = 0; i < h; i++)
-			tiles[i] = new Tile * [w];
-		for(int i = 0; i < h; i++)
-			for (int j = 0; j < w; j++)
-			{
-				tiles[i][j]->setTileType(tiletype[i][j]);
-				tiles[i][j]->setX(x_start + j * 1.0);
-				tiles[i][j]->setY(y_start + i * 1.0);
-			}
-	}
-	~Map()
-	{
-		for (int i = 0; i < height; i++)
-			delete[] tiles[i];
-		delete[] tiles;
-	}
+	Map() : width{ 0 }, height{ 0 }, tiles{ nullptr } {}
+
+	CREATE_FUNC(Map);
+
+	void initialLoad(const std::string &name);
+
+	void onTileBroken(int x, int y);
 };
 
 #endif
