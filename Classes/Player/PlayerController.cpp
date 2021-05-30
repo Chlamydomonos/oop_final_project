@@ -1,5 +1,7 @@
 #include "PlayerController.h"
-
+#include <../Classes/Physics/Box2DBodyComponent.h> 
+#include <../Classes/Item/ItemStackSprite.h>
+#include "Player.h"
 using namespace cocos2d;
 
 void PlayerController::onAdd()

@@ -9,11 +9,11 @@ bool TestItem::init() {
 
 	this->addComponent(Box2DWorldComponent::create(b2Vec2(0.0f, -10.0f)));
 
-	item = ItemStackSprite::create("testsprite");
+	//item = ItemStackSprite::create();
 
-	this->addChild(item);
+	//this->addChild(item);
 
-	item->GetBodyComponent()->addToWorld();
+	//item->GetBodyComponent()->addToWorld();
 
 	item->GetBodyComponent()->getBody()->SetTransform(b2Vec2(5, 5), 0.0f);
 

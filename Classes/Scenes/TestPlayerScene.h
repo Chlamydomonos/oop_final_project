@@ -8,6 +8,7 @@
 #include "../Physics/Box2DBodyComponent.h"
 #include "../Classes/Player/Player.h"
 
+
 #include <map>
 
 using namespace cocos2d;
@@ -19,10 +20,12 @@ public:
 	CREATE_FUNC(TestPlayerScene);
 	virtual void update(float delta);
 
+	void remove_object(b2Body*);
 private:
 	Player* Person;
 	cocos2d::Sprite* Ground;
-	std::map <EventKeyboard::KeyCode, bool> KeyPress;
+	ItemStackSprite* object;
+	Box2DWorldComponent* worldComponent;
 };
 
 #endif
