@@ -1,7 +1,7 @@
 #include "TestScene.h"
 #include "../Physics/Box2DWorldComponent.h"
 #include "../Physics/Box2DBodyComponent.h"
-#include "../Utils/VectorConversion.h"
+#include "../utils/VectorConversion.h"
 
 using namespace cocos2d;
 
