@@ -1,6 +1,7 @@
 #include "Box2DBodyComponent.h"
 #include "Box2DWorldComponent.h"
 #include "../Utils/VectorConversion.h"
+#include "Box2DWorldComponent.h"
 
 Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef *fixtureDef)
 {
@@ -36,6 +37,28 @@ Box2DBodyComponent *Box2DBodyComponent::create(b2BodyDef *bodyDef, b2FixtureDef 
         CC_SAFE_DELETE(ret);
 
     return ret;
+}
+
+Box2DBodyComponent::~Box2DBodyComponent()
+{
+    CC_SAFE_DELETE(bodyDef);
+    CC_SAFE_DELETE(fixtureDef);
+    bool temp = true;
+
+    auto node = getOwner();
+    cocos2d::Component *p = nullptr;
+
+    while (p == nullptr && node != nullptr)
+    {
+        p = node->getComponent("b2World");
+        node = node->getParent();
+    }
+
+    if (p)
+    {
+        auto world = dynamic_cast<Box2DWorldComponent *>(p);
+        world->getWorld()->DestroyBody(body);
+    }
 }
 
 void Box2DBodyComponent::update(float delta)

@@ -42,14 +42,7 @@ public:
 	*/
 	static Box2DBodyComponent *create(b2BodyDef *bodyDef, b2FixtureDef *fixtureDef);
 
-	virtual ~Box2DBodyComponent()
-	{
-		CC_SAFE_DELETE(bodyDef);
-		CC_SAFE_DELETE(fixtureDef);
-		bool temp = true;
-		
-		body->GetWorld()->DestroyBody(body);
-	}
+	virtual ~Box2DBodyComponent();
 
 	virtual void update(float delta);
 
