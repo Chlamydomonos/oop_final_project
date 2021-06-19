@@ -6,9 +6,10 @@
 
 void PlayerContact::BeginContact(b2Contact* contact) {
     
+    
 
     auto bodyA = contact->GetFixtureA()->GetBody();
-    auto bodyB= contact->GetFixtureB()->GetBody();
+    auto bodyB = contact->GetFixtureB()->GetBody();
 
 
     auto spriteA = (cocos2d::Sprite*)bodyA->GetUserData();
@@ -29,13 +30,6 @@ void PlayerContact::BeginContact(b2Contact* contact) {
         ItemObj = dynamic_cast<ItemStackSprite*>(spriteA);
     }
     
-    Person->ObtainItem(ItemObj);
-    ItemObj->BeObtained();
-
-    dynamic_cast<TestPlayerScene*>(
-        Director::getInstance()->getRunningScene()
-        )
-        ->remove_object(
-            ItemObj->GetBodyComponent()->getBody()
-        );
+    if (Person->ObtainItem(ItemObj))
+        ItemObj->BeObtained();
 }

@@ -4,7 +4,9 @@
 #include "../Utils/VectorConversion.h"
 #include "../Item/ItemStackSprite.h"
 #include "../Classes/Player/PlayerContact.h"
-
+#include "../Player/PlayerController.h"
+#include "../Utils/DeleteCheck.h"
+#include "../Items/TestObj.h"
 using namespace cocos2d;
 
 bool TestPlayerScene::init() {
@@ -30,13 +32,37 @@ bool TestPlayerScene::init() {
     groundBodyComponent->addToWorld();
 
  
-
-    object = ItemStackSprite::create("testobj");
+    auto item = new TestObj1();
+    object = ItemStackSprite::create(item, 10);
     this->addChild(object);
     object->GetBodyComponent()->addToWorld();
-    object->GetBodyComponent()->getBody()->SetUserData(object); // link this object! So that it be obtained easily in the Collision Listener!!
+    object->GetBodyComponent()->getBody()->SetUserData(object);
 
-    //create the player
+    auto item2 = new TestObj2();
+    object = ItemStackSprite::create(item2, 10, 2.0, 3.0);
+    this->addChild(object);
+    object->GetBodyComponent()->addToWorld();
+    object->GetBodyComponent()->getBody()->SetUserData(object);
+
+    auto item3 = new TestObj3();
+    object = ItemStackSprite::create(item3, 10, 11.0, 9.0);
+    this->addChild(object);
+    object->GetBodyComponent()->addToWorld();
+    object->GetBodyComponent()->getBody()->SetUserData(object);
+
+    auto item4 = new TestObj4();
+    object = ItemStackSprite::create(item4, 10, 15.0, 10.0);
+    this->addChild(object);
+    object->GetBodyComponent()->addToWorld();
+    object->GetBodyComponent()->getBody()->SetUserData(object);
+
+    auto item5 = new TestObj5();
+    object = ItemStackSprite::create(item5, 10, 13.5, 5.0);
+    this->addChild(object);
+    object->GetBodyComponent()->addToWorld();
+    object->GetBodyComponent()->getBody()->SetUserData(object);
+
+
     Person = Player::GetInstance();
 
     this->addChild(Person);
@@ -47,25 +73,20 @@ bool TestPlayerScene::init() {
     auto contact_listener = new PlayerContact();
     worldComponent->getWorld()->SetContactListener(contact_listener);
     
-    this->_eventDispatcher->addEventListenerWithSceneGraphPriority(Person->init_listener(),this);
-    
+    auto player_controller = PlayerController::create();
+    this->addComponent(player_controller);
+
     scheduleUpdate();
     
-    
-
     CCLOG("SCENE INIT FINISH!");
 
     return true;
 }
 
 void TestPlayerScene::update(float delta) {
+    auto list = this->getChildren();
+    DeleteCheck<TestPlayerScene>::CheckChild(this);
     Scene::update(delta);
-    Person->movement_control_listen();
-        if (Person->KeyPress[EventKeyboard::KeyCode::KEY_R]) {
-            auto t = object->GetBodyComponent()->getBody();
-            worldComponent->getWorld()->DestroyBody(t); 
-            //打断点之后没问题，不打断点就报错
-        }   
 }
 
 void TestPlayerScene::remove_object(b2Body* body) {
