@@ -46,6 +46,8 @@ public:
 	{
 		CC_SAFE_DELETE(bodyDef);
 		CC_SAFE_DELETE(fixtureDef);
+		bool temp = true;
+		
 		body->GetWorld()->DestroyBody(body);
 	}
 

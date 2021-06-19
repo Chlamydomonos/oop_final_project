@@ -13,12 +13,12 @@ bool PlayerCollection::init() {
         return false;
     auto Person = Player::GetInstance();
 
-    //auto title = Label::createWithSystemFont("Collections of the player", "Arial", 30);
+    auto title = Label::createWithSystemFont("Collections of the player", "Arial", 30);
     float height = Director::getInstance()->getVisibleSize().height;
     float width = Director::getInstance()->getVisibleSize().width;
-    //title->setPosition(Vec2(width / 2, height * 0.95));
+    title->setPosition(Vec2(width / 2, height * 0.95));
 
-    //this->addChild(title);
+    this->addChild(title);
 
     auto Items = Person->GetCollection();
 
@@ -33,18 +33,11 @@ bool PlayerCollection::init() {
 
     this->addChild(testimg);
 
-    //testimg->removeFromParent();
-
-    //for (int i = 0; i<24 && i<((int)Items.size()-24*page_fix); ++i) {
-        //Items[page_fix + i]->setPosition(Vec2(width/7*((i%6)+1), (0.85-0.15*(i/6))*height));
-        //this->addChild(Items[page_fix + i]);
-    //}
-
 
     CCLOG("CLOLLECTION INIT!");
     scheduleUpdate();
 
-    Director::getInstance()->popScene();
+    //Director::getInstance()->popScene();
     return true;
 }
 

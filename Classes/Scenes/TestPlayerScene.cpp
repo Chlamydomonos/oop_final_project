@@ -36,13 +36,11 @@ bool TestPlayerScene::init() {
     object->GetBodyComponent()->addToWorld();
     object->GetBodyComponent()->getBody()->SetUserData(object); // link this object! So that it be obtained easily in the Collision Listener!!
 
-       //create the player
+    //create the player
     Person = Player::GetInstance();
 
-    //Person->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 3, Director::getInstance()->getVisibleSize().height / 3));
     this->addChild(Person);
     Person->GetBC()->addToWorld();
-    //Person->GetBC()->getBody()->
     Person->GetBC()->getBody()->SetUserData(Person); // link this object! So that it be obtained easily in the Collision Listener!!
 
 
@@ -64,14 +62,13 @@ void TestPlayerScene::update(float delta) {
     Scene::update(delta);
     Person->movement_control_listen();
         if (Person->KeyPress[EventKeyboard::KeyCode::KEY_R]) {
-            worldComponent->getWorld()->Step(1 / 30, 3, 3);
-            worldComponent->getWorld()->DestroyBody(object->GetBodyComponent()->getBody());
-        }
-        //this is where 打断点之后没问题，不打断点就报错
+            auto t = object->GetBodyComponent()->getBody();
+            worldComponent->getWorld()->DestroyBody(t); 
+            //打断点之后没问题，不打断点就报错
+        }   
 }
 
 void TestPlayerScene::remove_object(b2Body* body) {
-    worldComponent->getWorld()->Step(1 / 30, 3, 3);
+    worldComponent->getWorld()->Step(1 / 60, 5, 5);
     worldComponent->getWorld()->DestroyBody(body);
-    //world运行时不能使用remove方法，需要step，再destroy
 }

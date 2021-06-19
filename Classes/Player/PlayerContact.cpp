@@ -8,7 +8,9 @@ void PlayerContact::BeginContact(b2Contact* contact) {
     
 
     auto bodyA = contact->GetFixtureA()->GetBody();
-    auto bodyB = contact->GetFixtureB()->GetBody();
+    auto bodyB= contact->GetFixtureB()->GetBody();
+
+
     auto spriteA = (cocos2d::Sprite*)bodyA->GetUserData();
     auto spriteB = (cocos2d::Sprite*)bodyB->GetUserData();
     Player* Person{ nullptr };
@@ -26,7 +28,7 @@ void PlayerContact::BeginContact(b2Contact* contact) {
         Person = dynamic_cast<Player*>(spriteB);
         ItemObj = dynamic_cast<ItemStackSprite*>(spriteA);
     }
-
+    
     Person->ObtainItem(ItemObj);
     ItemObj->BeObtained();
 
