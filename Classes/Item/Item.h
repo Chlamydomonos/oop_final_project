@@ -3,10 +3,20 @@
 
 using std::string;
 
+class ItemStack;
+class ItemStackSprite;
 class Item
 {
+protected:
 	string Name;
-	virtual void Picked() = 0;
-	virtual void Crashed() = 0;
+	Item(const char* n) :Name{n} {}
+public:
+	const char* getName() {
+		return Name.c_str();
+	}
+	friend ItemStack;
+	friend ItemStackSprite;
+	virtual void Picked() {};
+	virtual void Crashed() {};
 };
 

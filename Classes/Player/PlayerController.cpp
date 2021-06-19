@@ -1,11 +1,14 @@
 #include "PlayerController.h"
+#include <../Classes/Physics/Box2DBodyComponent.h> 
+#include <../Classes/Item/ItemStackSprite.h>
+#include "Player.h"
+#include "../Scenes/PlayerCollection.h"
 
 using namespace cocos2d;
 
 void PlayerController::onAdd()
 {
     Component::onAdd();
-    player = dynamic_cast<Player *>(getOwner());
 
     auto listener = EventListenerKeyboard::create();
 
@@ -14,9 +17,10 @@ void PlayerController::onAdd()
     };
     listener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event *event) {
         this->keyPress[keyCode] = false;
+        TransientActionCheck(keyCode);
     };
 
-    player->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, player);
+    this->getOwner()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this->getOwner());
 }
 
 void PlayerController::update(float delta)
@@ -33,5 +37,29 @@ void PlayerController::update(float delta)
 
     if (keyPress[EventKeyboard::KeyCode::KEY_W]) {
         player->GetBC()->getBody()->ApplyForce(b2Vec2(0, player->vertical_force), player->GetBC()->getBody()->GetWorldCenter(), true);
+    }
+
+}
+
+bool PlayerController::init() {
+    if (!Component::init())
+        return false;
+    player = Player::GetInstance();
+    return true;
+}
+
+void PlayerController::TransientActionCheck(EventKeyboard::KeyCode keyCode) {
+    switch (keyCode) {
+    case EventKeyboard::KeyCode::KEY_E:
+        if (this->getOwner()->getTag() != BAG_TAG) {
+            auto collection_scene = PlayerCollection::create();
+            Director::getInstance()->pushScene(collection_scene);
+        }
+        break;
+    case EventKeyboard::KeyCode::KEY_B:
+        if (this->getOwner()->getTag() == BAG_TAG) {
+            Director::getInstance()->popScene();
+        }
+        break;
     }
 }
