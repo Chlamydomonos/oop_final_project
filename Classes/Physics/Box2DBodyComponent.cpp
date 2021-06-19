@@ -62,7 +62,7 @@ void Box2DBodyComponent::addToWorld()
 
         if (p == nullptr)
             throw 1;
-
+        
         auto wp = dynamic_cast<Box2DWorldComponent *>(p);
         auto w = wp->getWorld();
         body = w->CreateBody(bodyDef);
