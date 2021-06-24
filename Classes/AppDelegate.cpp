@@ -28,6 +28,7 @@
 #include "Scenes/TestItem.h"
 #include "Scenes/TestPlayerScene.h"
 #include "Scenes/PlayerCollection.h"
+#include "Scenes/TestMapScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 
@@ -113,7 +114,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     //auto scene = PlayerCollection::create();
-    auto scene_t = TestPlayerScene::create();
+    auto scene_t = TestMapScene::create();
 
     // run
     director->runWithScene(scene_t);

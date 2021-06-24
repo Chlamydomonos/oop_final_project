@@ -68,6 +68,7 @@ bool TestPlayerScene::init() {
     this->addChild(Person);
     Person->GetBC()->addToWorld();
     Person->GetBC()->getBody()->SetUserData(Person); // link this object! So that it be obtained easily in the Collision Listener!!
+    //Person->GetBC()->getBody()->SetFixedRotation(true);
 
 
     auto contact_listener = new PlayerContact();

@@ -1,26 +1,28 @@
-#ifndef MAP_TILETYPE_H
-#define MAP_TILETYPE_H
+#ifndef MAP_TILE_TYPE_H
+#define MAP_TILE_TYPE_H
+
+#include <cocos2d.h>
 
 #include <string>
-#include <cocos2d.h>
 #include <map>
 
-class Tile;
+class MapTile;
 
 class TileType
 {
 private:
-	std::string _name;
-	int _hardness;
-
+	std::string name;
+	cocos2d::Texture2D **textures;
+	int hardness;
 public:
-	TileType(const std::string &name, int hardness);
-	static std::map<std::string, TileType *> ALL_TILES;
-
-	std::string getName() const { return _name; }
-	int getHardness() { return _hardness; }
-
-	virtual void onBroken(Tile *tile);
+	const std::string &getName() const { return name; }
+	cocos2d::Texture2D **getTextures() const { return textures; }
+	int getHardness() const { return hardness; }
+	static std::map<std::string, TileType *> ALL_TILE_TYPES;
+	TileType(const std::string &_name, int _hardness);
+	virtual ~TileType() { delete[] textures; }
+	virtual void onTileCreated(MapTile* tile);
+	virtual void onTileDestroyed(MapTile *tile);
 };
 
 #endif

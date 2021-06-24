@@ -50,7 +50,7 @@ public:
 	}
 
 
-	const float horizontal_velocity{ 2.0 };// the horizontal velocity (positive)
+	const float horizontal_velocity{ 5.0 };// the horizontal velocity (positive)
 	const float vertical_force{ 20.0 };
 	const int pack_grid_max{ 15 };
 	std::map <cocos2d::EventKeyboard::KeyCode, bool> KeyPress;
@@ -62,6 +62,4 @@ public:
 	~Player() {}
 
 	Box2DBodyComponent* GetBC() { return BC; }
-
-
 };

@@ -31,7 +31,6 @@ bool Player::init() {
     
     this->setTag(PLAYER_TAG); // 1 for a player
 
-
     return true;
 }
 

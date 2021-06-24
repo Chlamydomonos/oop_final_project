@@ -28,7 +28,7 @@ public:
 	RadialEmitter(): m_particleSystem{NULL}, m_callBack{NULL}, m_speed{0.0f},
 		m_emitRate{1.0f}, m_emitRemainder{0.0f}, m_flags{b2_waterParticle}, m_group{NULL}
 	{}
-	~RadialEmitter() {setGroup(NULL);};
+	~RadialEmitter() {setGroup(NULL);}
 	void setPosition(const b2Vec2& origin) {m_origin = origin; }// 设置喷射圆的中心位置
 	const b2Vec2& getPosition() const { return m_origin; }
 	void setSize(const b2Vec2& size) { m_halfsize = size; } // 设置喷射圆的大小

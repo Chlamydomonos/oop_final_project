@@ -2,6 +2,7 @@
 #include "../Physics/Box2DWorldComponent.h"
 #include "../Physics/Box2DBodyComponent.h"
 #include "../utils/VectorConversion.h"
+#include "../Water/WaterEmitter.h"
 
 using namespace cocos2d;
 
@@ -60,6 +61,8 @@ bool TestScene::init()
     auto dynamicBodyComponent = Box2DBodyComponent::create(&dynamicBodyDef, &dynamicFixtureDef);
     dynamicSprite->addComponent(dynamicBodyComponent);
     dynamicBodyComponent->addToWorld();
+
+    RadialEmitter *a = new RadialEmitter();
 
     //--¿ªÆôupdateº¯Êý------------------------------
 

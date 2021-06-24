@@ -11,8 +11,27 @@ void PlayerController::onAdd()
     Component::onAdd();
 
     auto listener = EventListenerKeyboard::create();
+    auto listener2 = EventListenerMouse::create();
+
+    listener2->onMouseDown = [=](EventMouse *event) {
+
+    };
+
+    listener2->onMouseMove = [=](EventMouse *event) {
+
+    };
+
+    listener2->onMouseScroll = [=](EventMouse *event) {
+
+    };
+
+    listener2->onMouseUp = [=](EventMouse *event) {
+
+    };
 
     listener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event *event) {
+        if (keyCode == EventKeyboard::KeyCode::KEY_W)
+            player->GetBC()->getBody()->SetLinearVelocity(b2Vec2(player->GetBC()->getBody()->GetLinearVelocity().x, player->GetBC()->getBody()->GetLinearVelocity().y + player->horizontal_velocity / 4.0f));
         this->keyPress[keyCode] = true;
     };
     listener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event *event) {
@@ -21,6 +40,7 @@ void PlayerController::onAdd()
     };
 
     this->getOwner()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this->getOwner());
+    this->getOwner()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener2, this->getOwner());
 }
 
 void PlayerController::update(float delta)
@@ -35,7 +55,7 @@ void PlayerController::update(float delta)
         player->GetBC()->getBody()->SetLinearVelocity(b2Vec2(player->horizontal_velocity, 0) + b2Vec2(0, player->GetBC()->getBody()->GetLinearVelocity().y));
     }
 
-    if (keyPress[EventKeyboard::KeyCode::KEY_W]) {
+    if (keyPress[EventKeyboard::KeyCode::KEY_W] && player->GetBC()->getBody()->GetLinearVelocity().y < player->horizontal_velocity * 4.0f) {
         player->GetBC()->getBody()->ApplyForce(b2Vec2(0, player->vertical_force), player->GetBC()->getBody()->GetWorldCenter(), true);
     }
 

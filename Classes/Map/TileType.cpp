@@ -1,17 +1,24 @@
 #include "TileType.h"
-#include "Tile.h"
+#include <regex>
 
 using namespace std;
+using namespace cocos2d;
 
-map<string, TileType *> TileType::ALL_TILES{};
+map<string, TileType *> TileType::ALL_TILE_TYPES{};
 
-TileType::TileType(const std::string &name, int hardness) : _name{name}, _hardness{hardness}
+TileType::TileType(const std::string &_name, int _hardness) : name{ _name }, hardness{ _hardness }, textures{ new Texture2D * [4] }
 {
-	ALL_TILES.insert({ name, this });
-	auto frame = cocos2d::SpriteFrame::create("assets/tiles" + name + ".png", cocos2d::Rect{ 0, 0, 32, 32 });
-	cocos2d::SpriteFrameCache::getInstance()->addSpriteFrame(frame, name);
+	ALL_TILE_TYPES[_name] = this;
+
+	for (int i = 0; i < 4; i++)
+		textures[i] = Director::getInstance()->getTextureCache()->addImage("assets/tiles/" + _name + "_" + to_string(i) + ".png");
 }
 
-void TileType::onBroken(Tile *tile)
+void TileType::onTileCreated(MapTile *tile)
+{
+
+}
+
+void TileType::onTileDestroyed(MapTile *tile)
 {
 }
