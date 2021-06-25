@@ -44,6 +44,11 @@ public:
 		if (getTile(x, y))
 			getTile(x, y)->destroyByForce(force);
 	}
+	bool IfTiled(int x, int y) {
+		if (tiles[x][y] == nullptr)
+			return false;
+		return true;
+	}
 };
 
 #endif // !MAP_GAME_MAP_H

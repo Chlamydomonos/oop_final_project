@@ -49,7 +49,7 @@ bool TestMapScene::init()
 	TileType *bedrock = new TileType("bedrock", -1);
 	WaterEmitterTile *waterEmitter = new WaterEmitterTile();
 
-	GameMap *gameMap = GameMap::create(100, 100);
+	gameMap = GameMap::create(100, 100);
 	GameMap::initInstance(gameMap);
 	gameObjects->addChild(gameMap);
 	gameMap->addToWorld();
@@ -97,6 +97,7 @@ bool TestMapScene::init()
 	gameObjects->addChild(shopIco);
 
 
+
 	//Hp and Oxygen
 	auto width = Director::getInstance()->getVisibleSize().width;
 	auto height = Director::getInstance()->getVisibleSize().height;
@@ -104,15 +105,22 @@ bool TestMapScene::init()
 	HpBar = ui::LoadingBar::create("HpBar.png");
 	HpBar->setDirection(ui::LoadingBar::Direction::RIGHT);
 	HpBar->setAnchorPoint(Vec2(1, 0.5));
-	HpBar->setPosition(Vec2(0.98 * width, 0.84 * height));
+	HpBar->setPosition(Vec2(0.98 * width, 0.81 * height));
 	this->addChild(HpBar);
 
 	OxyBar = ui::LoadingBar::create("OxyBar.png");
 	OxyBar->setDirection(ui::LoadingBar::Direction::RIGHT);
 	OxyBar->setAnchorPoint(Vec2(1, 0.5));
-	OxyBar->setPosition(Vec2(0.98 * width, 0.81 * height));
+	OxyBar->setPosition(Vec2(0.98 * width, 0.78 * height));
 	this->addChild(OxyBar);
 	
+
+
+	//Map Index 
+	MapIndex = DrawNode::create();
+	MapIndex->setPosition(width * 0.93, height * 0.91);
+	this->addChild(MapIndex);
+
 	scheduleUpdate();
 	return true;
 }
@@ -128,10 +136,29 @@ void TestMapScene::update(float delta)
 	mainNode->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
 	DeleteCheck::CheckChild(this);
 
+	//Update Hp and Oxygen Bar
 	HpBar->setPercent(Player::GetInstance()->hp / Player::GetInstance()->maxHp * 100);
 	OxyBar->setPercent(Player::GetInstance()->oxygen / Player::GetInstance()->maxOxygen * 100);
 	Scene::update(delta);
 	
+	//Update Map Index
+	MapIndex->clear();
+	int rad{ 6 };
+		int x = Player::GetInstance()->GetBC()->getBody()->GetPosition().x;
+	int y = Player::GetInstance()->GetBC()->getBody()->GetPosition().y;
+	//MapIndex->drawDot(Vec2(-0.5, -0.5) * rad, rad / 2, Color4F::RED); //Index the player
+	for (int i = 0; i < 16; ++i) {
+		if (x + i - 8 < 0)
+			continue;
+		for (int j = 0; j < 16; ++j) {
+			if (y + j - 8 < 0)
+				continue;
+			if (gameMap->IfTiled(x + i - 8, y + j - 8)) {
+				MapIndex->drawPoint(Vec2((i - 8) * rad, (j - 8) * rad), rad, Color4F::WHITE);
+			}
+		}
+	}
+	MapIndex->drawRect(Vec2(-9.5, -9.5) * rad, Vec2(8.5, 8.5) * rad, Color4F::WHITE);
 }
 
 TestMapScene::~TestMapScene()
