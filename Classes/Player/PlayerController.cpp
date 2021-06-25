@@ -19,41 +19,44 @@ void PlayerController::onAdd()
     player = Player::GetInstance();
 
     listener2->onMouseDown = [=](EventMouse *event) {
-        cx = event->getCursorX() - Director::getInstance()->getWinSize().width / 2;
-        cy = event->getCursorY() - Director::getInstance()->getWinSize().height / 2;
-        if (attacking)
-            nextAttack = true;
-        else
+        if (Director::getInstance()->getRunningScene()->getChildByName("mainNode"))
         {
-            if (cy < 0 && cy + cx < 0 && cy - cx < 0)
-                player->attack(1);
-            else if (cx > 0)
-                player->attack(2);
+            cx = event->getCursorX() - Director::getInstance()->getWinSize().width / 2;
+            cy = event->getCursorY() - Director::getInstance()->getWinSize().height / 2;
+            if (attacking)
+                nextAttack = true;
             else
-                player->attack(3);
-            attacking = true;
-            nextAttack = false;
-            player->schedule(
-                [=](float dt) {
-                    if (nextAttack)
-                    {
-                        if (cy < 0 && cy + cx < 0 && cy - cx < 0)
-                            player->attack(1);
-                        else if (cx > 0)
-                            player->attack(2);
+            {
+                if (cy < 0 && cy + cx < 0 && cy - cx < 0)
+                    player->attack(1);
+                else if (cx > 0)
+                    player->attack(2);
+                else
+                    player->attack(3);
+                attacking = true;
+                nextAttack = false;
+                player->schedule(
+                    [=](float dt) {
+                        if (nextAttack)
+                        {
+                            if (cy < 0 && cy + cx < 0 && cy - cx < 0)
+                                player->attack(1);
+                            else if (cx > 0)
+                                player->attack(2);
+                            else
+                                player->attack(3);
+                            nextAttack = false;
+                        }
                         else
-                            player->attack(3);
-                        nextAttack = false;
-                    }
-                    else
-                    {
-                        attacking = false;
-                        player->unschedule("attack");
-                    }
-                },
-                1.0f / player->attackSpeed,
-                "attack"
-            );
+                        {
+                            attacking = false;
+                            player->unschedule("attack");
+                        }
+                    },
+                    1.0f / player->attackSpeed,
+                        "attack"
+                        );
+            }
         }
     };
 

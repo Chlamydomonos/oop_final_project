@@ -92,7 +92,7 @@ bool TestMapScene::init()
 	gameObjects->addChild(slime);
 	slime->addToWorld();
 
-	auto shopIco = shop_icon::create(1,50);
+	auto shopIco = shop_icon::create(4,4);
 	gameObjects->addChild(shopIco);
 
 	scheduleUpdate();
