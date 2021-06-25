@@ -37,6 +37,11 @@ bool Player::init() {
 
     attackSpeed = 1.0f;
 
+    hp = 20;
+    maxHp = 20;
+    oxygen = 100;
+    maxOxygen = 100;
+
     return true;
 }
 

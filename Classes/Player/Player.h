@@ -67,6 +67,11 @@ public:
 
 	float attackSpeed;
 
+	int hp;
+	int maxHp;
+	int oxygen;
+	int maxOxygen;
+
 	std::map <cocos2d::EventKeyboard::KeyCode, bool> KeyPress;
 	bool just_out_of_shop{ false };
 	bool in_shop{ false };
