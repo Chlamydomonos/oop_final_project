@@ -13,6 +13,7 @@
 #include "../Slime/Slime.h"
 #include "../Tiles/Ore.h"
 #include "../Item/Item.h"
+#include "../Items/shop_icon.h"
 #include "../Utils/DeleteCheck.h"
 
 using namespace cocos2d;
@@ -78,6 +79,9 @@ bool TestMapScene::init()
 	gameObjects->addChild(slime);
 	slime->addToWorld();
 
+	auto shopIco = shop_icon::create(1,50);
+	gameObjects->addChild(shopIco);
+
 	scheduleUpdate();
 	return true;
 }
@@ -88,6 +92,7 @@ void TestMapScene::update(float delta)
 	mainNode->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
 	DeleteCheck::CheckChild(this);
 	Scene::update(delta);
+	
 }
 
 TestMapScene::~TestMapScene()

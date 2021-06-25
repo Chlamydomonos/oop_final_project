@@ -15,9 +15,6 @@ void PlayerContact::BeginContact(b2Contact* contact) {
     //Eat item 
     EatItemCheck(spriteA, spriteB);
 
-    //Invoke shop
-    InvokeShopCheck(spriteA, spriteB);
-
     //On the ground
     OnTheGroundCheck(spriteA, spriteB, true);
 
@@ -51,16 +48,6 @@ void PlayerContact::EatItemCheck(cocos2d::Sprite* spriteA, cocos2d::Sprite* spri
     if (Person)
         if (Person->ObtainItem(ItemObj))
             ItemObj->BeObtained();
-}
-
-void PlayerContact::InvokeShopCheck(cocos2d::Sprite* spriteA, cocos2d::Sprite* spriteB) {
-    if (!spriteA || !spriteB)
-        return;
-    Player* Person{ nullptr };
-    if ((spriteA->getTag() == PLAYER_TAG && spriteB->getTag() == SHOP_ICON_TAG) ||
-       (spriteB->getTag() == PLAYER_TAG && spriteA->getTag() == SHOP_ICON_TAG)) {
-        PlayerController::ReadyToGoToShop();
-    }
 }
 
 void PlayerContact::OnTheGroundCheck(cocos2d::Sprite* spriteA, cocos2d::Sprite* spriteB, bool begin) {

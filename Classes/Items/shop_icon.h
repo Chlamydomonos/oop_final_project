@@ -8,13 +8,10 @@ using std::string;
 class shop_icon : public cocos2d::Sprite
 {
 public:
-	static shop_icon* create();
-	shop_icon() : Sprite(),  BodyComponent{ nullptr }{};
+	static shop_icon* create(float, float);
+	shop_icon() : Sprite() {}
 	~shop_icon() {}
-	Box2DBodyComponent* GetBodyComponent();
-	void BeObtained();
-
+	void update(float delta);
 private:
-	Box2DBodyComponent* BodyComponent;
 };
 

@@ -16,6 +16,8 @@ void PlayerController::onAdd()
     auto listener = EventListenerKeyboard::create();
     auto listener2 = EventListenerMouse::create();
 
+    player = Player::GetInstance();
+
     listener2->onMouseDown = [=](EventMouse *event) {
         cx = event->getCursorX() - Director::getInstance()->getWinSize().width / 2;
         cy = event->getCursorY() - Director::getInstance()->getWinSize().height / 2;
@@ -106,12 +108,11 @@ void PlayerController::update(float delta)
 
     if (ReadyToShop) {
         ReadyToShop = false;
-        if (player->just_out_of_shop) {
-            player->just_out_of_shop = false;
-        }
-        else {
-            auto shop_scene = Shop::create();
+        auto shop_scene = Shop::create();
+        if (!player->in_shop) {
+            player->in_shop = true;
             Director::getInstance()->pushScene(shop_scene);
+
         }
     }
 

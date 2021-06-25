@@ -69,6 +69,7 @@ public:
 
 	std::map <cocos2d::EventKeyboard::KeyCode, bool> KeyPress;
 	bool just_out_of_shop{ false };
+	bool in_shop{ false };
 	bool on_the_ground{ false };
 
 	virtual bool init();

@@ -63,6 +63,7 @@ bool Shop::init() {
         Label::createWithSystemFont("ESC Shop", Font, 30),
         [this](Ref* sender) {
             Person->just_out_of_shop = true;
+            Person->in_shop= false;
             Director::getInstance()->popScene();
         });
     Menuitems.pushBack(t);
