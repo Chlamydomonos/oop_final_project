@@ -1,5 +1,6 @@
 #include "TestMapScene.h"
 
+#include "ui/CocosGUI.h"
 #include "../Map/GameMap.h"
 #include "../Map/MapTile.h"
 #include "../Map/TileSprite.h"
@@ -92,9 +93,26 @@ bool TestMapScene::init()
 	gameObjects->addChild(slime);
 	slime->addToWorld();
 
-	auto shopIco = shop_icon::create(4,4);
+	auto shopIco = shop_icon::create(4,8);
 	gameObjects->addChild(shopIco);
 
+
+	//Hp and Oxygen
+	auto width = Director::getInstance()->getVisibleSize().width;
+	auto height = Director::getInstance()->getVisibleSize().height;
+
+	HpBar = ui::LoadingBar::create("HpBar.png");
+	HpBar->setDirection(ui::LoadingBar::Direction::RIGHT);
+	HpBar->setAnchorPoint(Vec2(1, 0.5));
+	HpBar->setPosition(Vec2(0.98 * width, 0.84 * height));
+	this->addChild(HpBar);
+
+	OxyBar = ui::LoadingBar::create("OxyBar.png");
+	OxyBar->setDirection(ui::LoadingBar::Direction::RIGHT);
+	OxyBar->setAnchorPoint(Vec2(1, 0.5));
+	OxyBar->setPosition(Vec2(0.98 * width, 0.81 * height));
+	this->addChild(OxyBar);
+	
 	scheduleUpdate();
 	return true;
 }
@@ -109,6 +127,9 @@ void TestMapScene::update(float delta)
 	mainNode->setPositionX(Player::GetInstance()->getPositionX() * -1 + Director::getInstance()->getWinSize().width / 2);
 	mainNode->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
 	DeleteCheck::CheckChild(this);
+
+	HpBar->setPercent(Player::GetInstance()->hp / Player::GetInstance()->maxHp * 100);
+	OxyBar->setPercent(Player::GetInstance()->oxygen / Player::GetInstance()->maxOxygen * 100);
 	Scene::update(delta);
 	
 }

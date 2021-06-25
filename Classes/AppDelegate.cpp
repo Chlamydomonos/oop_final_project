@@ -29,6 +29,7 @@
 #include "Scenes/TestPlayerScene.h"
 #include "Scenes/PlayerCollection.h"
 #include "Scenes/TestMapScene.h"
+#include "Scenes/TestParticleScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 

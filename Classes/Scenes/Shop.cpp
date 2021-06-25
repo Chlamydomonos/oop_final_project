@@ -19,10 +19,6 @@ bool Shop::init() {
     title->setPosition(Vec2(width / 2, height * 0.94));
     this->addChild(title);
 
-    //MoneyLabel
-    moneyLabel = Label::createWithSystemFont(std::string("Money ")+std::to_string(Person->GetMoney()), Font, 35);
-    moneyLabel->setPosition(Vec2(width * 0.3, height * 0.8));
-    this->addChild(moneyLabel);
 
     //Sell everything
     auto button = ui::Button::create("sell_everything_button.png", "sell_everything_button_sel.png", "sell_everything_button.png");
@@ -44,29 +40,20 @@ bool Shop::init() {
 
     //Buy things
     Vector <MenuItem*> Menuitems;
-    auto t = MenuItemLabel::create(
-        Label::createWithSystemFont("Horizontal volocity +0.5", Font, 30), 
-        [this](Ref* sender) {
-            HorizontalSpeedIncrease(0.5);
-        });
-    Menuitems.pushBack(t);
 
-    t = MenuItemLabel::create(
-        Label::createWithSystemFont("Vertical inital volocity +0.5", Font, 30),
-        [this](Ref* sender) {
-            VerticalSpeedIncrease(0.5);
-        });
-    Menuitems.pushBack(t);
+    ShoppingItemCreate(Menuitems, "Horizontal Speed +0.5", (int)(0.5 * 10), [this]() {
+        Person->horizontal_velocity += 0.5;
+    });
 
+    ShoppingItemCreate(Menuitems, "Vertical Speed +0.5", (int)(0.5 * 10), [this]() {
+        Person->vertical_initial_velocity += 0.5;
+    });
 
-    t = MenuItemLabel::create(
-        Label::createWithSystemFont("ESC Shop", Font, 30),
-        [this](Ref* sender) {
-            Person->just_out_of_shop = true;
-            Person->in_shop= false;
-            Director::getInstance()->popScene();
-        });
-    Menuitems.pushBack(t);
+    ShoppingItemCreate(Menuitems, "ESC Shop", 0, [this]() {
+        Person->just_out_of_shop = true;
+        Person->in_shop = false;
+        Director::getInstance()->popScene();
+    });
 
     auto menu = Menu::createWithArray(Menuitems);
     menu->alignItemsVerticallyWithPadding(20);
@@ -88,7 +75,7 @@ void Shop::update(float delta) {
     //update the money label
     if (moneyModified) {
         moneyModified = false;
-        this->removeChild(moneyLabel);
+        if(moneyLabel) this->removeChild(moneyLabel);
         //delete moneyLabel;
         moneyLabel = Label::createWithSystemFont(std::string("Money ") + std::to_string(Person->GetMoney()), Font, 35);
         float height = Director::getInstance()->getVisibleSize().height;
@@ -107,20 +94,6 @@ bool Shop::PurchaseCheck(int money) {
     return true;
 }
 
-void Shop::HorizontalSpeedIncrease(float increment) {
-    const float ratio = 10.0; //money per velocity;
-    
-    if(PurchaseCheck(increment * ratio))
-        Person->horizontal_velocity += increment;
-}
-
-void Shop::VerticalSpeedIncrease(float increment) {
-    const float ratio = 10.0; //money per volocity;
-
-    if (PurchaseCheck(increment * ratio)) {
-        Person->vertical_initial_velocity += increment;
-    }
-}
 
 void Shop::SellEverything() {
     const float ratio = 1.0; //money per item unit
