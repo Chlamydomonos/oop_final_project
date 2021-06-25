@@ -19,7 +19,7 @@ bool Player::init() {
     dynamicBodyDef.position.Set(6.0f, 8.0f);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.375f, 0.5f);
+    dynamicBox.SetAsBox(0.365f, 0.4f);
 
     b2FixtureDef dynamicFixtureDef;
     dynamicFixtureDef.shape = &dynamicBox;
