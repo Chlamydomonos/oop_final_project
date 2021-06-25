@@ -21,6 +21,11 @@ public:
 			instance = create();
 		return instance;
 	}
+	static void releaseInstance()
+	{
+		instance = nullptr;
+		WaterRendererNode::releaseInstance();
+	}
 	void addToWorld();
 };
 

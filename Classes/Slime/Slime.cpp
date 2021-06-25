@@ -5,8 +5,9 @@
 #include "../Physics/Box2DBodyComponent.h"
 
 std::set<Slime *> Slime::SLIMES{};
+std::set<Slime *> Slime::SLIME_BOSSES{};
 
-Slime *Slime::create(float size, float x, float y)
+Slime *Slime::create(float size, float x, float y, bool isBoss)
 {
     Slime *ret = new (std::nothrow) Slime();
     if (ret && ret->init())
@@ -15,6 +16,9 @@ Slime *Slime::create(float size, float x, float y)
         ret->size = size;
 		ret->hp = size * 5;
         ret->setPosition(p2r({ x, y }));
+		ret->isBoss = isBoss;
+		if (ret->isBoss)
+			SLIME_BOSSES.insert(ret);
 		return ret;
     }
 
@@ -32,7 +36,10 @@ bool Slime::init()
 				particleGroup->ApplyLinearImpulse({ 1.0f * (left ? -1 : 1) * size * size, 4.0f * size * size});
 			if ((Player::GetInstance()->getPosition() - getPosition()).length() < size * 64.0f + 32.0f)
 				if ((left && Player::GetInstance()->getPositionX() <= getPositionX()) || (!left && Player::GetInstance()->getPositionX() >= getPositionX()))
-					Player::GetInstance()->GetBC()->getBody()->SetLinearVelocity(Player::GetInstance()->GetBC()->getBody()->GetLinearVelocity() + b2Vec2{5.0f * (left ? -1 : 1), 5.0f});
+				{
+					Player::GetInstance()->GetBC()->getBody()->SetLinearVelocity(Player::GetInstance()->GetBC()->getBody()->GetLinearVelocity() + b2Vec2{ 5.0f * (left ? -1 : 1), 5.0f });
+					Player::GetInstance()->hp -= 1;
+				}
 		},
 		2.0f,
 		"jump"
@@ -69,6 +76,7 @@ void Slime::update(float delta)
 
 void Slime::onDeath()
 {
+	Player::GetInstance()->GetMoney() += 100;
 	if (size < 0.99f)
 	{
 		auto ps = particleGroup->GetParticleSystem();
@@ -89,7 +97,7 @@ void Slime::onDeath()
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			Slime *temp = Slime::create(size * 0.3f, getPositionX() / 64.0f, getPositionY() / 64.0f);
+			Slime *temp = Slime::create(size * 0.3f, getPositionX() / 64.0f, getPositionY() / 64.0f, isBoss);
 			getParent()->addChild(temp);
 			temp->addToWorld();
 		}

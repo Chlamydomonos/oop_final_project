@@ -31,6 +31,7 @@ public:
 		if(!instance)
 			instance = map; 
 	}
+	static void releaseInstance() { instance = nullptr; }
 
 	MapTile *getTile(int x, int y);
 	MapTile *getTile(b2Vec2 position) { return getTile(position.x, position.y); }

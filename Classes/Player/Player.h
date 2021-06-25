@@ -55,6 +55,9 @@ public:
 			return Player::instance;
 		}
 	}
+
+	static void releaseInstance() { instance = nullptr; }
+
 	std::vector <singleCollection>& GetCollection() {
 		return ItemCollection;
 	}

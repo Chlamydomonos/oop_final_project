@@ -42,7 +42,7 @@ bool TestMapScene::init()
 	
 	DeleteCheck::world = dynamic_cast<Box2DWorldComponent *>(getComponent("b2World"))->getWorld();
 
-	Item *iron = new Item("iron");
+	Item *iron = new Item("iron", 1);
 	TileType *stone = new TileType("stone", 0.5);
 	TileType *ironOre = new Ore("iron_ore", 1, iron);
 	TileType *bedrock = new TileType("bedrock", -1);
@@ -88,7 +88,7 @@ bool TestMapScene::init()
 	auto contact_listener = new PlayerContact();
 	dynamic_cast<Box2DWorldComponent*>(getComponent("b2World"))->getWorld()->SetContactListener(contact_listener);
 
-	auto slime = Slime::create(4, 8, 8);
+	auto slime = Slime::create(4, 8, 8, false);
 	gameObjects->addChild(slime);
 	slime->addToWorld();
 

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "../Scenes/PlayerCollection.h"
 #include "../Scenes/Shop.h"
+#include "../Scenes/GameOver.h"
 
 using namespace cocos2d;
 
@@ -89,6 +90,9 @@ void PlayerController::onAdd()
 void PlayerController::update(float delta)
 {
     Component::update(delta);
+
+    if (player->hp <= 0)
+        Director::getInstance()->replaceScene(GameOver::create());
 
     if (keyPress[EventKeyboard::KeyCode::KEY_A] && !keyPress[EventKeyboard::KeyCode::KEY_D]) {
         player->GetBC()->getBody()->SetLinearVelocity(b2Vec2(-player->horizontal_velocity, 0) + b2Vec2(0, player->GetBC()->getBody()->GetLinearVelocity().y));

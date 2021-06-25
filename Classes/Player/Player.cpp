@@ -19,7 +19,7 @@ bool Player::init() {
     dynamicBodyDef.position.Set(6.0f, 8.0f);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.374f, 0.49f);
+    dynamicBox.SetAsBox(0.37f, 0.45f);
 
     b2FixtureDef dynamicFixtureDef;
     dynamicFixtureDef.shape = &dynamicBox;
@@ -35,12 +35,35 @@ bool Player::init() {
     this->setTag(PLAYER_TAG); // 1 for a player
     this->setName("Player");
 
-    attackSpeed = 1.0f;
+    attackSpeed = 2.0f;
 
     hp = 20;
     maxHp = 20;
     oxygen = 100;
     maxOxygen = 100;
+
+    schedule(
+        [=](float) {
+            if (getPositionY() / 64 >= 499)
+                oxygen = maxOxygen;
+            else if (getPositionY() / 64 >= 399)
+                oxygen -= 1;
+            else if (getPositionY() / 64 >= 299)
+                oxygen -= 2;
+            else if (getPositionY() / 64 >= 199)
+                oxygen -= 3;
+            else
+                oxygen -= 4;
+
+            if (oxygen < 0)
+            {
+                oxygen = 0;
+                hp -= 1;
+            }
+        },
+        1.0f,
+        "decreaseOxygen"
+    );
 
     return true;
 }
@@ -81,12 +104,12 @@ void Player::attack(int target)
         addChild(effect);
         effect->execute();
     }
-    else if((int)getPositionY() % 64 <= 3)
+    else if((int)getPositionY() % 64 <= 10 || (int)getPositionY() % 64 >= 54)
     {
         int x = (int)getPositionX() / 64;
         if ((int)getPositionX() % 64 >= 32)
             x++;
-        int y = (int)getPositionY() / 64;
+        int y = ((int)getPositionY() + 10) / 64;
         if (GameMap::getInstance()->getTile(x, y - 1))
         {
             Vec2 d;

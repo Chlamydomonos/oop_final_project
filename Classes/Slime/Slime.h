@@ -11,17 +11,25 @@ private:
 	float size;
 	int hp;
 	b2ParticleGroup *particleGroup;
+	bool isBoss;
 public:
 	static std::set<Slime *> SLIMES;
-	static Slime *create(float size, float x, float y);
+	static std::set<Slime *> SLIME_BOSSES;
+	static Slime *create(float size, float x, float y, bool isBoss);
 	Slime():
 		size{0},
 		hp{ 0 },
-		particleGroup{ nullptr }
+		particleGroup{ nullptr },
+		isBoss{false}
 	{
 		SLIMES.insert(this);
 	}
-	~Slime() { SLIMES.erase(this); }
+	~Slime()
+	{ 
+		SLIMES.erase(this); 
+		if (isBoss)
+			SLIME_BOSSES.erase(this);
+	}
 	bool init();
 	void addToWorld();
 	void update(float delta);

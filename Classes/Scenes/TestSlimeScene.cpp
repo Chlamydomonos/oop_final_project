@@ -73,7 +73,7 @@ bool TestSlimeScene::init()
     addChild(SlimeRenderer::getInstance());
     SlimeRenderer::getInstance()->addToWorld();
 
-    auto slime = Slime::create(1, 8, 2);
+    auto slime = Slime::create(1, 8, 2, false);
     this->addChild(slime);
     slime->addToWorld();
 

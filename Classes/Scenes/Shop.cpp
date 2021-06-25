@@ -1,6 +1,7 @@
 #include "Shop.h"
 #include <vector>
 #include "../Player/PlayerController.h"
+#include "../Item/Item.h"
 #include "ui/CocosGUI.h"
 #include <string>
 using namespace cocos2d;
@@ -123,15 +124,9 @@ void Shop::VerticalSpeedIncrease(float increment) {
 }
 
 void Shop::SellEverything() {
-    const float ratio = 1.0; //money per item unit
-
-    int item_unit_cnt{ 0 };
-
     for (auto it : Person->GetCollection()) {
-        item_unit_cnt += it.Count;
+        Person->GetMoney() += it.Count * Item::ALL_ITEMS[it.Name]->getValue();
     }
-
-    Person->GetMoney() += item_unit_cnt * ratio;
     moneyModified = true;
     Person->GetCollection().clear();
 }

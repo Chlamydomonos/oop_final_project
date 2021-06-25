@@ -21,6 +21,11 @@ public:
 			instance = create();
 		return instance;
 	}
+	static void releaseInstance()
+	{
+		instance = nullptr;
+		SlimeRendererNode::releaseInstance();
+	}
 	void addToWorld();
 };
 

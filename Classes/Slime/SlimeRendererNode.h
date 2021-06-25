@@ -16,6 +16,10 @@ public:
 			instance = create();
 		return instance;
 	}
+	static void releaseInstance()
+	{
+		instance = nullptr;
+	}
 	CREATE_FUNC(SlimeRendererNode);
 	bool init();
 	void addToWorld();
