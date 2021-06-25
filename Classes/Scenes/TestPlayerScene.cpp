@@ -92,10 +92,8 @@ bool TestPlayerScene::init() {
 
 
     //add the shop icon
-    auto shop = shop_icon::create();
-    this->addChild(shop);
-    shop->GetBodyComponent()->addToWorld();
-    shop->GetBodyComponent()->getBody()->SetUserData(shop);
+    auto shop = shop_icon::create(10,12);
+    
 
     scheduleUpdate();
     

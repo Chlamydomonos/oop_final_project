@@ -13,6 +13,7 @@
 #include "../Slime/Slime.h"
 #include "../Tiles/Ore.h"
 #include "../Item/Item.h"
+#include "../Items/shop_icon.h"
 #include "../Utils/DeleteCheck.h"
 #include "../Water/WaterRenderer.h"
 #include "../Tiles/WaterEmitterTile.h"
@@ -91,6 +92,9 @@ bool TestMapScene::init()
 	gameObjects->addChild(slime);
 	slime->addToWorld();
 
+	auto shopIco = shop_icon::create(1,50);
+	gameObjects->addChild(shopIco);
+
 	scheduleUpdate();
 	return true;
 }
@@ -106,6 +110,7 @@ void TestMapScene::update(float delta)
 	mainNode->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
 	DeleteCheck::CheckChild(this);
 	Scene::update(delta);
+	
 }
 
 TestMapScene::~TestMapScene()
