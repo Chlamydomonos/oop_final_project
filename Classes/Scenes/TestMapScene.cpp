@@ -22,6 +22,8 @@ bool TestMapScene::init()
 	TileSprite::EMPTY = Director::getInstance()->getTextureCache()->addImage("empty.png");
 	this->addComponent(Box2DWorldComponent::create({ 0.0f, -10.0f }));
 	
+	DeleteCheck::world = dynamic_cast<Box2DWorldComponent *>(getComponent("b2World"))->getWorld();
+
 	Item *iron = new Item("iron");
 	TileType *stone = new TileType("stone", 0.5);
 	TileType *ironOre = new Ore("iron_ore", 1, iron);
@@ -84,7 +86,7 @@ void TestMapScene::update(float delta)
 {
 	mainNode->setPositionX(Player::GetInstance()->getPositionX() * -1 + Director::getInstance()->getWinSize().width / 2);
 	mainNode->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
-	DeleteCheck<TestMapScene>::CheckChild(this);
+	DeleteCheck::CheckChild(this);
 	Scene::update(delta);
 }
 
@@ -94,9 +96,4 @@ TestMapScene::~TestMapScene()
 	delete TileType::ALL_TILE_TYPES["iron_ore"];
 	delete TileType::ALL_TILE_TYPES["bedrock"];
 	delete Item::ALL_ITEMS["iron"];
-}
-
-b2World *TestMapScene::GetWorld()
-{
-	return dynamic_cast<Box2DWorldComponent *>(getComponent("b2World"))->getWorld();
 }

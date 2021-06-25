@@ -14,7 +14,6 @@ public:
 	CREATE_FUNC(TestMapScene);
 
 	virtual ~TestMapScene();
-	b2World *GetWorld();
 private:
 	cocos2d::Node *mainNode;
 };

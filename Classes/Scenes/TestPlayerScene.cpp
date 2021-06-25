@@ -106,7 +106,7 @@ bool TestPlayerScene::init() {
 
 void TestPlayerScene::update(float delta) {
     auto list = this->getChildren();
-    DeleteCheck<TestPlayerScene>::CheckChild(this);
+    DeleteCheck::CheckChild(this);
     Scene::update(delta);
 }
 

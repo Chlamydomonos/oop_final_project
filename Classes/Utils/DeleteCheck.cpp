@@ -6,3 +6,5 @@
 #include "../Item/ItemStackSprite.h"
 
 USING_NS_CC;
+
+b2World *DeleteCheck::world = nullptr;

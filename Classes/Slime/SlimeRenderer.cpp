@@ -29,7 +29,7 @@ void SlimeRenderer::addToWorld()
     gameObjects = mainNode->getChildByName("gameObjects");
     texture = RenderTexture::create(Director::getInstance()->getWinSize().width, Director::getInstance()->getWinSize().height);
     texture->setName("RenderTexture");
-    texture->getSprite()->setOpacity(0xe0);
+    texture->getSprite()->setOpacity(0x99);
     texture->setPosition(Director::getInstance()->getWinSize() / 2);
     getParent()->addChild(texture);
     mainNode->addChild(SlimeRendererNode::getInstance());

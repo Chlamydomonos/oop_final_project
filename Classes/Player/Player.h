@@ -60,7 +60,7 @@ public:
 	}
 
 
-	float horizontal_velocity{ 2.0 };// the horizontal velocity (positive)
+	float horizontal_velocity{ 5.0 };// the horizontal velocity (positive)
 	float vertical_force{ 20.0 };
 	float vertical_initial_velocity{ 0.0 };
 	const int pack_grid_max{ 15 };
