@@ -20,9 +20,12 @@ public:
 
 	void TransientActionCheck(cocos2d::EventKeyboard::KeyCode keyCode);
 
+	void static ReadyToGoToShop();
 private:
 	Player* player{nullptr};
 	std::map<cocos2d::EventKeyboard::KeyCode, bool> keyPress;
+	static bool ReadyToShop;
 };
+
 
 #endif // !PLAYER_PLAYER_CONTROLLER_H

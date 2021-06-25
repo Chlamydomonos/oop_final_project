@@ -3,8 +3,11 @@
 #include <../Classes/Item/ItemStackSprite.h>
 #include "Player.h"
 #include "../Scenes/PlayerCollection.h"
+#include "../Scenes/Shop.h"
 
 using namespace cocos2d;
+
+bool PlayerController::ReadyToShop{ false };
 
 void PlayerController::onAdd()
 {
@@ -36,7 +39,25 @@ void PlayerController::update(float delta)
     }
 
     if (keyPress[EventKeyboard::KeyCode::KEY_W]) {
+
+        //If the player is on the ground, then it can gain the initial velocity
+        if (player->on_the_ground == true) {
+            player->GetBC()->getBody()->SetLinearVelocity(
+                b2Vec2(0, player->vertical_initial_velocity) + b2Vec2(player->GetBC()->getBody()->GetLinearVelocity().x, player->GetBC()->getBody()->GetLinearVelocity().y));
+        }
+        
         player->GetBC()->getBody()->ApplyForce(b2Vec2(0, player->vertical_force), player->GetBC()->getBody()->GetWorldCenter(), true);
+    }
+
+    if (ReadyToShop) {
+        ReadyToShop = false;
+        if (player->just_out_of_shop) {
+            player->just_out_of_shop = false;
+        }
+        else {
+            auto shop_scene = Shop::create();
+            Director::getInstance()->pushScene(shop_scene);
+        }
     }
 
 }
@@ -55,11 +76,16 @@ void PlayerController::TransientActionCheck(EventKeyboard::KeyCode keyCode) {
             auto collection_scene = PlayerCollection::create();
             Director::getInstance()->pushScene(collection_scene);
         }
-        break;
-    case EventKeyboard::KeyCode::KEY_B:
         if (this->getOwner()->getTag() == BAG_TAG) {
             Director::getInstance()->popScene();
         }
         break;
+
+    default:
+        break;
     }
+}
+
+void PlayerController::ReadyToGoToShop() {
+    ReadyToShop = true;
 }

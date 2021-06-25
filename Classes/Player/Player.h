@@ -4,6 +4,10 @@
 #define ITEM_TAG 2
 #define DEL_TAG -7
 #define BAG_TAG 3
+#define SHOP_TAG 4
+#define SHOP_ICON_TAG 5
+#define GROUND_TAG 6
+
 
 #include <map>
 #include <vector>
@@ -31,9 +35,14 @@ private:
 
 	};
 	std::vector <singleCollection> ItemCollection;
+	int money{ 0 };
 	static Player* instance;
 
 public:
+
+	int& GetMoney() {
+		return money;
+	}
 
 	static Player* GetInstance() {
 		if (Player::instance) {
@@ -50,10 +59,13 @@ public:
 	}
 
 
-	const float horizontal_velocity{ 2.0 };// the horizontal velocity (positive)
-	const float vertical_force{ 20.0 };
+	float horizontal_velocity{ 2.0 };// the horizontal velocity (positive)
+	float vertical_force{ 20.0 };
+	float vertical_initial_velocity{ 0.0 };
 	const int pack_grid_max{ 15 };
 	std::map <cocos2d::EventKeyboard::KeyCode, bool> KeyPress;
+	bool just_out_of_shop{ false };
+	bool on_the_ground{ false };
 
 	virtual bool init();
 	bool ObtainItem(ItemStackSprite* item);
@@ -63,5 +75,6 @@ public:
 
 	Box2DBodyComponent* GetBC() { return BC; }
 
+	
 
 };

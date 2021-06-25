@@ -7,6 +7,7 @@
 #include "../Player/PlayerController.h"
 #include "../Utils/DeleteCheck.h"
 #include "../Items/TestObj.h"
+#include "../Items/shop_icon.h"
 using namespace cocos2d;
 
 bool TestPlayerScene::init() {
@@ -17,9 +18,13 @@ bool TestPlayerScene::init() {
 
     this->addComponent(worldComponent);
 
+    float height = Director::getInstance()->getVisibleSize().height;
+    float width = Director::getInstance()->getVisibleSize().width;
+
     //create the ground
     Ground = cocos2d::Sprite::create("pure_red.png");
     Ground->setScale(64,4);
+    Ground->setTag(GROUND_TAG);
     b2BodyDef staticBodyDef;
     staticBodyDef.position.Set(8.0f, 0.5f);
     b2PolygonShape staticBox;
@@ -30,8 +35,10 @@ bool TestPlayerScene::init() {
     Ground->addComponent(groundBodyComponent);
     this->addChild(Ground);
     groundBodyComponent->addToWorld();
+    groundBodyComponent->getBody()->SetUserData(Ground);
 
- 
+    
+    //a series of testing bodies
     auto item = new TestObj1();
     object = ItemStackSprite::create(item, 10);
     this->addChild(object);
@@ -63,6 +70,8 @@ bool TestPlayerScene::init() {
     object->GetBodyComponent()->getBody()->SetUserData(object);
 
 
+
+    // add the player
     Person = Player::GetInstance();
 
     this->addChild(Person);
@@ -70,11 +79,22 @@ bool TestPlayerScene::init() {
     Person->GetBC()->getBody()->SetUserData(Person); // link this object! So that it be obtained easily in the Collision Listener!!
 
 
+
+    //add the contact listener
     auto contact_listener = new PlayerContact();
     worldComponent->getWorld()->SetContactListener(contact_listener);
     
+
+    //add the player controller
     auto player_controller = PlayerController::create();
     this->addComponent(player_controller);
+
+
+    //add the shop icon
+    auto shop = shop_icon::create();
+    this->addChild(shop);
+    shop->GetBodyComponent()->addToWorld();
+    shop->GetBodyComponent()->getBody()->SetUserData(shop);
 
     scheduleUpdate();
     
