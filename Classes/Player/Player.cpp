@@ -41,7 +41,7 @@ bool Player::init() {
 }
 
 bool Player::ObtainItem(ItemStackSprite* i) {
-    for (auto it : ItemCollection) {
+    for (auto &it : ItemCollection) {
         if (strcmp(it.Name.c_str(),i->getName()) == 0) {
             it.Count += i->getCount();
             return true;
