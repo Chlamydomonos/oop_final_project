@@ -14,7 +14,42 @@ void PlayerController::onAdd()
     auto listener2 = EventListenerMouse::create();
 
     listener2->onMouseDown = [=](EventMouse *event) {
-
+        cx = event->getCursorX() - Director::getInstance()->getWinSize().width / 2;
+        cy = event->getCursorY() - Director::getInstance()->getWinSize().height / 2;
+        if (attacking)
+            nextAttack = true;
+        else
+        {
+            if (cy < 0 && cy + cx < 0 && cy - cx < 0)
+                player->attack(1);
+            else if (cx > 0)
+                player->attack(2);
+            else
+                player->attack(3);
+            attacking = true;
+            nextAttack = false;
+            player->schedule(
+                [=](float dt) {
+                    if (nextAttack)
+                    {
+                        if (cy < 0 && cy + cx < 0 && cy - cx < 0)
+                            player->attack(1);
+                        else if (cx > 0)
+                            player->attack(2);
+                        else
+                            player->attack(3);
+                        nextAttack = false;
+                    }
+                    else
+                    {
+                        attacking = false;
+                        player->unschedule("attack");
+                    }
+                },
+                1.0f / player->attackSpeed,
+                "attack"
+            );
+        }
     };
 
     listener2->onMouseMove = [=](EventMouse *event) {
@@ -65,6 +100,7 @@ bool PlayerController::init() {
     if (!Component::init())
         return false;
     player = Player::GetInstance();
+    attacking = false;
     return true;
 }
 

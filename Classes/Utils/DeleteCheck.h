@@ -1,6 +1,7 @@
 #pragma once
 #include <cocos2d.h>
 #include <Box2D/Box2D.h>
+#include "../Item/ItemStackSprite.h"
 
 template<class T>
 class DeleteCheck {

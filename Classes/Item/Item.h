@@ -1,16 +1,16 @@
 #pragma once
 #include <string>
-
-using std::string;
+#include <map>
 
 class ItemStack;
 class ItemStackSprite;
 class Item
 {
 protected:
-	string Name;
-	Item(const char* n) :Name{n} {}
+	std::string Name;
 public:
+	Item(const std::string &n) :Name{ n } { ALL_ITEMS[n] = this; }
+	static std::map<std::string, Item *> ALL_ITEMS;
 	const char* getName() {
 		return Name.c_str();
 	}

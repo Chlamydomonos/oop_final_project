@@ -23,7 +23,8 @@ body{ nullptr }
 
 MapTile::~MapTile()
 {
-	map->getWorld()->DestroyBody(body);
+	if(!map->getDestroyed())
+		map->getWorld()->DestroyBody(body);
 }
 
 void MapTile::setDestroyStatus(int destroyStatus)
@@ -34,8 +35,11 @@ void MapTile::setDestroyStatus(int destroyStatus)
 
 void MapTile::destroyByForce(int force)
 {
-	this->destroyStatus -= force / type->getHardness();
-	onDestroyStatusChanged();
+	if (type->getHardness() > 0)
+	{
+		this->destroyStatus -= force / type->getHardness();
+		onDestroyStatusChanged();
+	}
 }
 
 void MapTile::onDestroyStatusChanged()

@@ -6,7 +6,7 @@ using namespace cocos2d;
 
 map<string, TileType *> TileType::ALL_TILE_TYPES{};
 
-TileType::TileType(const std::string &_name, int _hardness) : name{ _name }, hardness{ _hardness }, textures{ new Texture2D * [4] }
+TileType::TileType(const std::string &_name, float _hardness) : name{ _name }, hardness{ _hardness }, textures{ new Texture2D * [4] }
 {
 	ALL_TILE_TYPES[_name] = this;
 

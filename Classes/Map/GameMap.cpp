@@ -5,8 +5,11 @@
 using namespace std;
 using namespace cocos2d;
 
+GameMap *GameMap::instance = nullptr;
+
 GameMap::~GameMap()
 {
+    destroyed = true;
     for (int i = 0; i < width; i++)
         for (int j = 0; j < height; j++)
             delete tiles[i][j];
@@ -20,6 +23,7 @@ GameMap *GameMap::create(int width, int height)
     if (ret)
     {
         ret->autorelease();
+        ret->setName("Map");
         ret->width = width;
         ret->height = height;
         MapTile **tiles = new MapTile * [width * height];

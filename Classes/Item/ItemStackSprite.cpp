@@ -9,7 +9,7 @@ ItemStackSprite* ItemStackSprite::create(Item* Type, int Count, float x, float y
     spr->Object->Type = Type;
     spr->Object->Count = Count;
 
-    if (spr && spr->initWithFile(string(Type->getName())+".png"))
+    if (spr && spr->initWithFile("assets/items/" + string(Type->getName())+".png"))
     {
         spr->autorelease();
 

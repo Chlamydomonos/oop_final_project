@@ -23,6 +23,7 @@ class Player: public cocos2d::Sprite
 private:
 	Box2DBodyComponent* BC;
 	PlayerController* Controller;
+
 	class singleCollection {
 	public:
 		std::string Name;
@@ -53,6 +54,9 @@ public:
 	const float horizontal_velocity{ 5.0 };// the horizontal velocity (positive)
 	const float vertical_force{ 20.0 };
 	const int pack_grid_max{ 15 };
+
+	float attackSpeed;
+
 	std::map <cocos2d::EventKeyboard::KeyCode, bool> KeyPress;
 
 	virtual bool init();
@@ -62,4 +66,6 @@ public:
 	~Player() {}
 
 	Box2DBodyComponent* GetBC() { return BC; }
+
+	void attack(int target);
 };

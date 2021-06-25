@@ -13,13 +13,13 @@ class TileType
 private:
 	std::string name;
 	cocos2d::Texture2D **textures;
-	int hardness;
+	float hardness;
 public:
 	const std::string &getName() const { return name; }
 	cocos2d::Texture2D **getTextures() const { return textures; }
-	int getHardness() const { return hardness; }
+	float getHardness() const { return hardness; }
 	static std::map<std::string, TileType *> ALL_TILE_TYPES;
-	TileType(const std::string &_name, int _hardness);
+	TileType(const std::string &_name, float _hardness);
 	virtual ~TileType() { delete[] textures; }
 	virtual void onTileCreated(MapTile* tile);
 	virtual void onTileDestroyed(MapTile *tile);

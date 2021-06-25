@@ -14,9 +14,9 @@ public:
 	CREATE_FUNC(TestMapScene);
 
 	virtual ~TestMapScene();
+	b2World *GetWorld();
 private:
-	cocos2d::Sprite *dynamicSprite;
-	cocos2d::Sprite *staticSprite;
+	cocos2d::Node *mainNode;
 };
 
 #endif

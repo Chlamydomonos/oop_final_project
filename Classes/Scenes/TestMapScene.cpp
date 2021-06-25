@@ -8,6 +8,12 @@
 #include "../Physics/Box2DWorldComponent.h"
 #include "../Physics/Box2DBodyComponent.h"
 #include "../Player/PlayerController.h"
+#include "../Player/PlayerContact.h"
+#include "../Slime/SlimeRenderer.h"
+#include "../Slime/Slime.h"
+#include "../Tiles/Ore.h"
+#include "../Item/Item.h"
+#include "../Utils/DeleteCheck.h"
 
 using namespace cocos2d;
 
@@ -15,17 +21,60 @@ bool TestMapScene::init()
 {
 	TileSprite::EMPTY = Director::getInstance()->getTextureCache()->addImage("empty.png");
 	this->addComponent(Box2DWorldComponent::create({ 0.0f, -10.0f }));
-	TileType *stone = new TileType("stone", 1);
+	
+	Item *iron = new Item("iron");
+	TileType *stone = new TileType("stone", 0.5);
+	TileType *ironOre = new Ore("iron_ore", 1, iron);
+	TileType *bedrock = new TileType("bedrock", -1);
+
+	mainNode = Node::create();
+	mainNode->setName("mainNode");
+	addChild(mainNode);
+	mainNode->scheduleUpdate();
+
+	auto gameObjects = Node::create();
+	gameObjects->setName("gameObjects");
+	mainNode->addChild(gameObjects);
+	gameObjects->scheduleUpdate();
+
 	GameMap *gameMap = GameMap::create(100, 100);
-	this->addChild(gameMap);
+	GameMap::initInstance(gameMap);
+	gameObjects->addChild(gameMap);
 	gameMap->addToWorld();
 	for (int i = 0; i < 100; i++)
-		gameMap->createTile(stone, i, 0);
-	this->addChild(Player::GetInstance());
+	{
+		gameMap->createTile(bedrock, i, 0);
+		gameMap->createTile(bedrock, i, 99);
+	}
+	for (int i = 1; i < 99; i++)
+	{
+		gameMap->createTile(bedrock, 0, i);
+		gameMap->createTile(bedrock, 99, i);
+	}
+	for (int i = 1; i < 30; i++)
+		gameMap->createTile(stone, i, 1);
+	for (int i = 1; i < 29; i++)
+		gameMap->createTile(stone, i, 2);
+	for (int i = 1; i < 28; i++)
+		gameMap->createTile(stone, i, 3);
+	for (int i = 31; i < 40; i++)
+		gameMap->createTile(ironOre, i, 1);
+	gameObjects->addChild(Player::GetInstance());
 	Player::GetInstance()->GetBC()->addToWorld();
 	Player::GetInstance()->GetBC()->getBody()->SetFixedRotation(true);
+	Player::GetInstance()->GetBC()->getBody()->SetUserData(Player::GetInstance());
 
-	this->addComponent(PlayerController::create());
+	gameObjects->addComponent(PlayerController::create());
+
+	this->addChild(SlimeRenderer::getInstance());
+	SlimeRenderer::getInstance()->addToWorld();
+
+	auto contact_listener = new PlayerContact();
+	dynamic_cast<Box2DWorldComponent*>(getComponent("b2World"))->getWorld()->SetContactListener(contact_listener);
+
+	auto slime = Slime::create(4, 8, 8);
+	gameObjects->addChild(slime);
+	slime->addToWorld();
 
 	scheduleUpdate();
 	return true;
@@ -33,12 +82,21 @@ bool TestMapScene::init()
 
 void TestMapScene::update(float delta)
 {
-	this->setPositionX(Player::GetInstance()->getPositionX() * -1 + Director::getInstance()->getWinSize().width / 2);
-	this->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
+	mainNode->setPositionX(Player::GetInstance()->getPositionX() * -1 + Director::getInstance()->getWinSize().width / 2);
+	mainNode->setPositionY(Player::GetInstance()->getPositionY() * -1 + Director::getInstance()->getWinSize().height / 2);
+	DeleteCheck<TestMapScene>::CheckChild(this);
 	Scene::update(delta);
 }
 
 TestMapScene::~TestMapScene()
 {
 	delete TileType::ALL_TILE_TYPES["stone"];
+	delete TileType::ALL_TILE_TYPES["iron_ore"];
+	delete TileType::ALL_TILE_TYPES["bedrock"];
+	delete Item::ALL_ITEMS["iron"];
+}
+
+b2World *TestMapScene::GetWorld()
+{
+	return dynamic_cast<Box2DWorldComponent *>(getComponent("b2World"))->getWorld();
 }

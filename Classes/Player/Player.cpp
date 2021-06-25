@@ -2,6 +2,9 @@
 #include <../Classes/Item/ItemStackSprite.h>
 #include "Player.h"
 #include "PlayerController.h"
+#include "../Slime/Slime.h"
+#include "../Map/GameMap.h"
+#include "AttackEffectSprite.h"
 
 using namespace cocos2d;
 
@@ -16,12 +19,12 @@ bool Player::init() {
     dynamicBodyDef.position.Set(6.0f, 8.0f);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.5f, 0.5f);
+    dynamicBox.SetAsBox(0.375f, 0.5f);
 
     b2FixtureDef dynamicFixtureDef;
     dynamicFixtureDef.shape = &dynamicBox;
     dynamicFixtureDef.density = 1.0f;
-    dynamicFixtureDef.friction = 2;
+    dynamicFixtureDef.friction = 20;
     dynamicFixtureDef.restitution = 0.2f;
 
     auto dynamicBodyComponent = Box2DBodyComponent::create(&dynamicBodyDef, &dynamicFixtureDef);
@@ -30,6 +33,9 @@ bool Player::init() {
     this->BC = dynamicBodyComponent;
     
     this->setTag(PLAYER_TAG); // 1 for a player
+    this->setName("Player");
+
+    attackSpeed = 1.0f;
 
     return true;
 }
@@ -50,4 +56,53 @@ bool Player::ObtainItem(ItemStackSprite* i) {
 
     return false;
     
+}
+
+void Player::attack(int target)
+{
+    Slime *nearest = nullptr;
+    for (auto i : Slime::SLIMES)
+    {
+        if ((i->getPosition() - getPosition()).length() < i->getSize() * 64.0f + 32.0f)
+            if (!nearest || (i->getPosition() - getPosition()).length() < (nearest->getPosition() - getPosition()).length())
+                nearest = i;
+    }
+    if (nearest)
+    {
+        Vec2 direction = Vec2::forAngle((nearest->getPosition() - getPosition()).getAngle());
+        nearest->getParticleGroup()->ApplyLinearImpulse({direction.x * 25.0f * nearest->getSize(), direction.y * 25.0f * nearest->getSize()});
+        nearest->hurt(1);
+        auto effect = AttackEffectSprite::create(direction.getAngle());
+        addChild(effect);
+        effect->execute();
+    }
+    else if((int)getPositionY() % 64 <= 3)
+    {
+        int x = (int)getPositionX() / 64;
+        if ((int)getPositionX() % 64 >= 32)
+            x++;
+        int y = (int)getPositionY() / 64;
+        if (GameMap::getInstance()->getTile(x, y - 1))
+        {
+            Vec2 d;
+            if (target == 1)
+            {
+                GameMap::getInstance()->destroyTileByForce(x, y - 1, 0x2000);
+                d = { 0, -1 };
+            }
+            else if (target == 2)
+            {
+                GameMap::getInstance()->destroyTileByForce(x + 1, y, 0x2000);
+                d = { 1, 0 };
+            }
+            else
+            {
+                GameMap::getInstance()->destroyTileByForce(x - 1, y, 0x2000);
+                d = { -1, 0 };
+            }
+            auto effect = AttackEffectSprite::create(d.getAngle());
+            addChild(effect);
+            effect->execute();
+        }
+    }
 }

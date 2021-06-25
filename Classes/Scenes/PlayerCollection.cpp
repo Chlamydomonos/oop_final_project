@@ -26,7 +26,7 @@ bool PlayerCollection::init() {
     for (auto it : Items) {
         auto center = Vec2(width * (0.1 + 0.2 * (cnt % 5)), height * (1-(0.2 + 0.2 * (cnt / 5))));
 
-        auto entity = Sprite::create(it.Name+".png");
+        auto entity = Sprite::create("assets/items/" + it.Name+".png");
         entity->setScaleX(64 / entity->getContentSize().width);
         entity->setScaleY(64 / entity->getContentSize().height);
         entity->setAnchorPoint(Vec2(0.5, 0.5));
