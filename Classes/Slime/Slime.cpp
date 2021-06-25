@@ -79,7 +79,7 @@ void Slime::onDeath()
 		def.color = { 0x96, 0xcc, 0x7a, 0x40 };
 		for (int i = os; i < os + pn; i++)
 		{
-			def.lifetime = 7.5f + (std::rand() % 1000) / 200.0f;
+			def.lifetime = (std::rand() % 1000) / 200.0f;
 			def.velocity.Set((std::rand() % 1000) / 50.0f * size * size, (std::rand() % 1000) / 50.0f * size * size);
 			def.position = positions[i];
 			ps->CreateParticle(def);

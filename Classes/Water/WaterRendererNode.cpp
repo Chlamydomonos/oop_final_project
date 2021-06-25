@@ -1,22 +1,22 @@
-#include "SlimeRendererNode.h"
+#include "WaterRendererNode.h"
 #include "../Physics/Box2DWorldComponent.h"
 #include "../Player/Player.h"
 #include "../Utils/VectorConversion.h"
 
 using namespace cocos2d;
 
-SlimeRendererNode *SlimeRendererNode::instance = nullptr;
+WaterRendererNode *WaterRendererNode::instance = nullptr;
 
-bool SlimeRendererNode::init()
+bool WaterRendererNode::init()
 {
     if (!DrawNode::init())
         return false;
-    this->setName("SlimeRendererNode");
+    this->setName("WaterRendererNode");
     scheduleUpdate();
     return true;
 }
 
-void SlimeRendererNode::addToWorld()
+void WaterRendererNode::addToWorld()
 {
     Node *node = this->getParent();
     auto cp = node->getComponent("b2World");
@@ -33,10 +33,10 @@ void SlimeRendererNode::addToWorld()
     auto wcp = dynamic_cast<Box2DWorldComponent *>(cp);
     b2ParticleSystemDef def;
     particleSystem = wcp->getWorld()->CreateParticleSystem(&def);
-    particleSystem->SetRadius(0.035f);
+    particleSystem->SetRadius(0.08f);
 }
 
-void SlimeRendererNode::update(float delta)
+void WaterRendererNode::update(float delta)
 {
     clear();
     b2Vec2 *positions = particleSystem->GetPositionBuffer();
@@ -53,8 +53,7 @@ void SlimeRendererNode::update(float delta)
 
     for (int i = 0; i < particleCount; i++)
     {
-        if (abs((positions[i] - b2PlayerPosition).x) < b2HalfScreenWidth && abs((positions[i] - b2PlayerPosition).y) < b2HalfScreenHeight
-            && std::rand() % 1000 < 500)
+        if (abs((positions[i] - b2PlayerPosition).x) < b2HalfScreenWidth && abs((positions[i] - b2PlayerPosition).y) < b2HalfScreenHeight)
         {
             drawDot(p2r(positions[i]), 8.0f, Color4F(Color4B(colors[i].r, colors[i].g, colors[i].b, colors[i].a / 2)));
             drawDot(p2r(positions[i]), 4.0f, Color4F(Color4B(colors[i].r, colors[i].g, colors[i].b, colors[i].a / 1.5f)));

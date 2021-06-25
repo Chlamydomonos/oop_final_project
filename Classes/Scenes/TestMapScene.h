@@ -16,6 +16,7 @@ public:
 	virtual ~TestMapScene();
 private:
 	cocos2d::Node *mainNode;
+	float maxDelta;
 };
 
 #endif

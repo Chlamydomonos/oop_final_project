@@ -62,8 +62,6 @@ bool TestScene::init()
     dynamicSprite->addComponent(dynamicBodyComponent);
     dynamicBodyComponent->addToWorld();
 
-    RadialEmitter *a = new RadialEmitter();
-
     //--¿ªÆôupdateº¯Êý------------------------------
 
     scheduleUpdate();
