@@ -21,11 +21,19 @@ public:
 private:
 	Player* Person;
 	bool PurchaseCheck(int);
-	void HorizontalSpeedIncrease(float);
-	void VerticalSpeedIncrease(float);
-	cocos2d::Label* moneyLabel;
-	bool moneyModified{ false };
+	cocos2d::Label* moneyLabel{ nullptr };
+	bool moneyModified{ true };
 	void SellEverything();
+	
+template <class func>
+void ShoppingItemCreate(cocos2d::Vector <cocos2d::MenuItem*>& Menuitems, std::string name, int price, func f) {
+	auto t = MenuItemLabel::create(
+		Label::createWithSystemFont(name + (price > 0 ? "  [PRICE " + std::to_string(price)+"]" : ""), Font, 30),
+		[=,this](Ref* sender) {
+			if (PurchaseCheck(price)) f();
+		});
+	Menuitems.pushBack(t);
+}
 
 };
 
