@@ -50,6 +50,12 @@ public:
 			return false;
 		return true;
 	}
+	int getWidth() {
+		return width;
+	}
+	int getHeight() {
+		return height;
+	}
 };
 
 #endif // !MAP_GAME_MAP_H

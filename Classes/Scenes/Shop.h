@@ -24,16 +24,36 @@ private:
 	cocos2d::Label* moneyLabel{ nullptr };
 	bool moneyModified{ true };
 	void SellEverything();
-	
-template <class func>
-void ShoppingItemCreate(cocos2d::Vector <cocos2d::MenuItem*>& Menuitems, std::string name, int price, func f) {
-	auto t = MenuItemLabel::create(
-		Label::createWithSystemFont(name + (price > 0 ? "  [PRICE " + std::to_string(price)+"]" : ""), Font, 30),
+	bool newly_disabled{ true };
+	void create_menu();
+	cocos2d::Menu* menu{ nullptr };
+
+template <class func, class is_max> 
+void ShoppingItemCreate(cocos2d::Vector <cocos2d::MenuItem*>& Menuitems, std::string name, int price, func f,is_max c) {
+	std::string text{ name };
+	if (c()) {
+		text += " [SOLD OUT]";
+		price = 0x7fffffff;
+	}else if (price > 0) {
+		text += "  [$";
+		text += std::to_string(price);
+		text += "]";
+	}
+
+	auto t = cocos2d::MenuItemLabel::create(
+		Label::createWithSystemFont(text, Font, 30),
 		[=,this](Ref* sender) {
-			if (PurchaseCheck(price)) f();
+			if (PurchaseCheck(price)) {
+				f();
+				if (c()) {
+					this->newly_disabled = true;
+				}
+			}
 		});
+	
 	Menuitems.pushBack(t);
 }
+
 
 };
 

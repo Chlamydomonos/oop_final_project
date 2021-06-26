@@ -3,7 +3,7 @@
 
 #include <cocos2d.h>
 #include <Box2D/Box2D.h>
-
+#include "ui/CocosGUI.h"
 class MainScene : public cocos2d::Scene
 {
 public:
@@ -18,6 +18,10 @@ private:
 	cocos2d::Node *mainNode;
 	cocos2d::Node *gameObjects;
 
+	cocos2d::ui::LoadingBar* HpBar;
+	cocos2d::ui::LoadingBar* OxyBar;
+	cocos2d::DrawNode* MapIndex;
+
 	void initBackGround();
 	void initNodes();
 	void initPhysics();
@@ -30,6 +34,7 @@ private:
 	void initPlayer();
 	void initSlimes();
 	void initShop();
+	void initHUDandBar();
 };
 
 #endif // !SCENES_MAIN_SCENE_H

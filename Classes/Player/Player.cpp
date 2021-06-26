@@ -37,6 +37,8 @@ bool Player::init() {
 
     attackSpeed = 2.0f;
 
+    attackForce = 0x2000;
+
     hp = 20;
     maxHp = 20;
     oxygen = 100;
@@ -115,17 +117,17 @@ void Player::attack(int target)
             Vec2 d;
             if (target == 1)
             {
-                GameMap::getInstance()->destroyTileByForce(x, y - 1, 0x2000);
+                GameMap::getInstance()->destroyTileByForce(x, y - 1, attackForce);
                 d = { 0, -1 };
             }
             else if (target == 2)
             {
-                GameMap::getInstance()->destroyTileByForce(x + 1, y, 0x2000);
+                GameMap::getInstance()->destroyTileByForce(x + 1, y, attackForce);
                 d = { 1, 0 };
             }
             else
             {
-                GameMap::getInstance()->destroyTileByForce(x - 1, y, 0x2000);
+                GameMap::getInstance()->destroyTileByForce(x - 1, y, attackForce);
                 d = { -1, 0 };
             }
             auto effect = AttackEffectSprite::create(d.getAngle());

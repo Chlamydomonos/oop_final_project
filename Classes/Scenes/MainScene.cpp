@@ -38,9 +38,36 @@ bool MainScene::init()
 	initPlayer();
 	initSlimes();
 	initShop();
+	initHUDandBar();
 
     scheduleUpdate();
     return true;
+}
+
+void MainScene::initHUDandBar() {
+	//Hp and Oxygen
+	auto width = Director::getInstance()->getVisibleSize().width;
+	auto height = Director::getInstance()->getVisibleSize().height;
+
+	HpBar = ui::LoadingBar::create("HpBar.png");
+	HpBar->setDirection(ui::LoadingBar::Direction::RIGHT);
+	HpBar->setAnchorPoint(Vec2(1, 0.5));
+	HpBar->setPosition(Vec2(0.98 * width, 0.81 * height));
+	HpBar->setGlobalZOrder(2);
+	this->addChild(HpBar);
+
+	OxyBar = ui::LoadingBar::create("OxyBar.png");
+	OxyBar->setDirection(ui::LoadingBar::Direction::RIGHT);
+	OxyBar->setAnchorPoint(Vec2(1, 0.5));
+	OxyBar->setPosition(Vec2(0.98 * width, 0.78 * height));
+	OxyBar->setGlobalZOrder(2);
+	this->addChild(OxyBar);
+
+	//Map Index 
+	MapIndex = DrawNode::create();
+	MapIndex->setPosition(width * 0.93, height * 0.91);
+	MapIndex->setGlobalZOrder(2);
+	this->addChild(MapIndex);
 }
 
 void MainScene::update(float delta)
@@ -54,6 +81,30 @@ void MainScene::update(float delta)
 	if (Slime::SLIME_BOSSES.size() == 0)
 		Director::getInstance()->replaceScene(WinScene::create());
 
+	//Update Hp and Oxygen Bar
+	HpBar->setPercent((float)Player::GetInstance()->hp / Player::GetInstance()->maxHp * 100);
+	OxyBar->setPercent((float)Player::GetInstance()->oxygen / Player::GetInstance()->maxOxygen * 100);
+	//CCLOG("OXYGEN: %d", Player::GetInstance()->oxygen);
+
+	//Update Map Index
+	MapIndex->clear();
+	int rad{ 6 };
+	int x = Player::GetInstance()->GetBC()->getBody()->GetPosition().x;
+	int y = Player::GetInstance()->GetBC()->getBody()->GetPosition().y;
+	int max_x = GameMap::getInstance()->getWidth();
+	int max_y = GameMap::getInstance()->getHeight();
+	for (int i = 0; i < 16; ++i) {
+		if (x + i - 8 < 0 || x + i - 8 >= max_x)
+			continue;
+		for (int j = 0; j < 16; ++j) {
+			if (y + j - 8 < 0 || y + j - 8 >= max_y)
+				continue;
+			if (GameMap::getInstance()->IfTiled(x + i - 8, y + j - 8)) {
+				MapIndex->drawPoint(Vec2((i - 8) * rad, (j - 8) * rad), rad, Color4F::WHITE);
+			}
+		}
+	}
+	MapIndex->drawRect(Vec2(-9.5, -9.5) * rad, Vec2(8.5, 8.5) * rad, Color4F::WHITE);
 	Scene::update(delta);
 }
 

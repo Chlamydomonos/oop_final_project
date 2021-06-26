@@ -69,11 +69,19 @@ public:
 	const int pack_grid_max{ 15 };
 
 	float attackSpeed;
+	int attackForce;
 
 	int hp;
 	int maxHp;
 	int oxygen;
 	int maxOxygen;
+
+	int maxHorizontalVel{ 10 };
+	int maxVeritcalVel{ 5 };
+	int maxmaxOxygen{ 1000 };
+	int maxmaxHp{ 100 };
+	float maxAttackSpeed{ 10.0f };
+	int maxAttackForce{ 0x2000 * 10 };
 
 	std::map <cocos2d::EventKeyboard::KeyCode, bool> KeyPress;
 	bool just_out_of_shop{ false };
