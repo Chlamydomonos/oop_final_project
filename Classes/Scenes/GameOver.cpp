@@ -18,6 +18,7 @@ bool GameOver::init()
     auto t = MenuItemLabel::create(
         Label::createWithSystemFont("Quit To Main Menu", "Arial", 30),
         [this](Ref *sender) {
+            Director::getInstance()->popToRootScene();
             Director::getInstance()->replaceScene(MainMenu::create());
         });
     menuItems.pushBack(t);

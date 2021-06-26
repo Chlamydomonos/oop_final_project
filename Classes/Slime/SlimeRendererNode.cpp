@@ -50,11 +50,11 @@ void SlimeRendererNode::update(float delta)
     int b2HalfScreenWidth = halfScreenWidth / 64;
     int b2HalfScreenHeight = halfScreenHeight / 64;
 
-
     for (int i = 0; i < particleCount; i++)
     {
-        if (abs((positions[i] - b2PlayerPosition).x) < b2HalfScreenWidth && abs((positions[i] - b2PlayerPosition).y) < b2HalfScreenHeight
-            && std::rand() % 1000 < 500)
+        if (std::rand() % 1000 < 500 &&
+            abs((positions[i] - b2PlayerPosition).x) < b2HalfScreenWidth && 
+            abs((positions[i] - b2PlayerPosition).y) < b2HalfScreenHeight)
         {
             drawDot(p2r(positions[i]), 8.0f, Color4F(Color4B(colors[i].r, colors[i].g, colors[i].b, colors[i].a / 2)));
             drawDot(p2r(positions[i]), 4.0f, Color4F(Color4B(colors[i].r, colors[i].g, colors[i].b, colors[i].a / 1.5f)));

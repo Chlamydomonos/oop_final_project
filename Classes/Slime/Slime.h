@@ -12,6 +12,7 @@ private:
 	int hp;
 	b2ParticleGroup *particleGroup;
 	bool isBoss;
+	bool inWorld;
 public:
 	static std::set<Slime *> SLIMES;
 	static std::set<Slime *> SLIME_BOSSES;
@@ -20,7 +21,8 @@ public:
 		size{0},
 		hp{ 0 },
 		particleGroup{ nullptr },
-		isBoss{false}
+		isBoss{false},
+		inWorld{false}
 	{
 		SLIMES.insert(this);
 	}

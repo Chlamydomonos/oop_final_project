@@ -64,6 +64,8 @@ void Slime::addToWorld()
 		pd.color.Set(0x5f, 0xb3, 0x36, 0xff);
 		particleGroup = ps->CreateParticleGroup(pd);
 	}
+
+	inWorld = true;
 }
 
 void Slime::update(float delta)
@@ -72,6 +74,20 @@ void Slime::update(float delta)
 		setPosition(p2r(particleGroup->GetCenter()));
 	if (hp <= 0)
 		onDeath();
+
+	if (inWorld && (Player::GetInstance()->getPosition() - getPosition()).length() < 2048)
+	{
+		if (!particleGroup)
+			addToWorld();
+	}
+	else
+	{
+		if (particleGroup)
+		{
+			particleGroup->DestroyParticles();
+			particleGroup = nullptr;
+		}
+	}
 }
 
 void Slime::onDeath()
