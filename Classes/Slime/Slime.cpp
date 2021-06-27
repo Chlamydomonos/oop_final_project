@@ -73,7 +73,10 @@ void Slime::update(float delta)
 	if(particleGroup)
 		setPosition(p2r(particleGroup->GetCenter()));
 	if (hp <= 0)
+	{
 		onDeath();
+		return;
+	}
 
 	if (inWorld && (Player::GetInstance()->getPosition() - getPosition()).length() < 2048)
 	{

@@ -227,7 +227,7 @@ void MainScene::initPlayer()
 	Player::GetInstance()->GetBC()->addToWorld();
 	Player::GetInstance()->GetBC()->getBody()->SetFixedRotation(true);
 	Player::GetInstance()->GetBC()->getBody()->SetUserData(Player::GetInstance());
-	Player::GetInstance()->GetBC()->getBody()->SetTransform({ 61, 505 }, 0);
+	Player::GetInstance()->GetBC()->getBody()->SetTransform({ 59, 500 }, 0);
 
 	gameObjects->addComponent(PlayerController::create());
 
