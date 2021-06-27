@@ -7,8 +7,13 @@
 
 void Ore::onTileDestroyed(MapTile *tile)
 {
-	auto sprite = ItemStackSprite::create(item, 1, tile->getX(), tile->getY() + 1);
+	auto sprite = ItemStackSprite::create(item, 1, tile->getX(), tile->getY());
 	GameMap::getInstance()->getParent()->addChild(sprite);
-	sprite->GetBodyComponent()->addToWorld();
-	sprite->GetBodyComponent()->getBody()->SetUserData(sprite);
+	GameMap::getInstance()->scheduleOnce([=](float) {
+			sprite->GetBodyComponent()->addToWorld();
+			sprite->GetBodyComponent()->getBody()->SetUserData(sprite);
+		},
+		0.05f,
+		"dropItem"
+	);
 }
